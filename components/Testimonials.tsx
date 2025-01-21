@@ -4,16 +4,16 @@ import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import { testimonials } from '@/constants';
-import { Navigation, Pagination } from 'swiper/modules';
+import { Navigation } from 'swiper/modules';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-interface Testimonial {
-  id: number;
-  quote: string;
-  name: string;
-  date: string;
-}
+// interface Testimonial {
+//   id: number;
+//   quote: string;
+//   name: string;
+//   date: string;
+// }
 
 const Testimonials = () => {
   return (
@@ -39,7 +39,7 @@ const Testimonials = () => {
           <SwiperSlide key={testimonial.id} className='p-20'>
             <div className="mx-2 p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow">
               <p className="text-sm text-gray-600 italic mb-4">
-                "{testimonial.quote}"
+              {`"${testimonial.quote}"`}
               </p>
               <h4 className="text-lg font-semibold text-blue-600">
                 - {testimonial.name}

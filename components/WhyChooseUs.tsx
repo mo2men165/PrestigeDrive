@@ -3,12 +3,12 @@
 import { features } from '@/constants';
 import React, { useState, useEffect } from 'react';
 
-interface Feature {
-  id: number;
-  icon: string;
-  title: string;
-  description: string;
-}
+// interface Feature {
+//   id: number;
+//   icon: string;
+//   title: string;
+//   description: string;
+// }
 
 const WhyChooseUs = () => {
   const [isMobile, setIsMobile] = useState(false);
