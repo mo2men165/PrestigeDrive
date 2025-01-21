@@ -1,7 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
 import { contactInfo, quickLinks, services, socialMedia } from '@/constants';
 import { logo } from '@/public/assets';
 

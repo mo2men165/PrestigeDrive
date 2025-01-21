@@ -1,8 +1,7 @@
 'use client';
 import { motion } from 'framer-motion';
 import { FaSearch, FaCalendarCheck, FaCar } from 'react-icons/fa';
-import { useEffect } from 'react';
-import { useInView } from 'react-intersection-observer';
+
 
 const steps = [
   {
