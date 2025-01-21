@@ -3,25 +3,13 @@
 import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
+import { carsData } from '@/constants';
 
-const carDetails = {
-  1: {
-    title: 'Mercedes-Benz S-Class',
-    price: 120,
-    description: 'Luxury car with chauffeur service available.',
-  },
-  2: {
-    title: 'BMW 7 Series',
-    price: 100,
-    description: 'Elegant and sporty car.',
-  },
-  // Add more cars as needed
-};
 
 export default function BookingPage() {
   const { carId } = useParams(); // Use useParams to get dynamic segment
   const router = useRouter();
-  const car = carDetails[carId as keyof typeof carDetails];
+  const car = carsData[carId as keyof typeof carsData];
 
   const [pickupDate, setPickupDate] = useState('');
   const [dropoffDate, setDropoffDate] = useState('');
@@ -35,11 +23,11 @@ export default function BookingPage() {
       return;
     }
 
-    toast.success(
-      `Booking confirmed for ${car.title} from ${pickupDate} to ${dropoffDate}${
-        chauffeurService ? ' with chauffeur service' : ''
-      }.`
-    );
+    // toast.success(
+    //   `Booking confirmed for ${car.title} from ${pickupDate} to ${dropoffDate}${
+    //     chauffeurService ? ' with chauffeur service' : ''
+    //   }.`
+    // );
 
     // Example: Redirect to confirmation or another page
     router.push('/confirmation');
@@ -50,12 +38,12 @@ export default function BookingPage() {
     return <p>Car not found.</p>;
   }
 
-  return (
-    <section className="container mx-auto py-12">
+  return ( 
+    <section className="container mx-auto py-12 my-16">
       <div className="flex flex-col gap-8">
-        <h2 className="text-3xl font-semibold">Book Your {car.title}</h2>
-        <p className="text-lg">{car.description}</p>
-        <p className="text-xl font-bold">£{car.price} / day</p>
+        {/* <h2 className="text-3xl font-semibold">Book Your {car.title}</h2> */}
+        {/* <p className="text-lg">{car.description}</p> */}
+        {/* <p className="text-xl font-bold">£`{car.price}` / day</p> */}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Pickup Date */}
