@@ -4,12 +4,11 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import Modal from 'react-modal';
 import { carsData } from '@/constants';
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import emailjs from 'emailjs-com';
-import { pd } from '@/public/assets';
+import  Modal  from 'react-modal';
 
 
 const customStyles = {
