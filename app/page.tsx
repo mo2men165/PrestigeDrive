@@ -1,10 +1,9 @@
-import SearchBar from '../components/SearchBar';
+import SearchBar from '@/components/SearchBar';
 import Hero from '@/components/Hero';
 import Featured from '@/components/Featured';
 import FeaturedDeals from '@/components/FeaturedDeals';
 import WhyChooseUs from '@/components/WhyChooseUs';
 import Testimonials from '@/components/Testimonials';
-
 import Blog from './blog/page';
 import HowItWorks from '@/components/HowItWorks';
 import PopularCategories from '@/components/PopularCategories';
@@ -16,9 +15,9 @@ import AboutSection from '@/components/AboutSection';
 export default function Home() {
   return (
     <>
+      <SearchBar />
       <Hero />
       <div className="container mx-auto py-6">
-        <SearchBar />
         <AboutSection />  
         <Featured />
         <FeaturedDeals />
@@ -28,7 +27,6 @@ export default function Home() {
         <HowItWorks />
         <PopularCategories />
         <FAQ />
-        {/* <Newsletter /> */}
         <Testimonials />
         <Blog />
       </div>

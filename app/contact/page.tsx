@@ -2,7 +2,12 @@
 export default function Contact() {
   return (
     <section className="container mx-auto py-12 my-16">
-      <h1 className="text-4xl font-bold mb-6 text-center">Contact Us</h1>
+      <div className="bg-gradient-to-r from-purple-950 to-purple-700 rounded-lg p-8 text-white mb-12">
+        <h1 className="text-4xl font-bold mb-4">Contact Us</h1>
+        <p className="text-lg leading-8">
+          For all inquiries, feel free to reach out or leave your details and one of our experts will get in touch.
+        </p>
+      </div>      
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
         {/* Contact Information */}
         <div className="space-y-6">
@@ -26,7 +31,7 @@ export default function Contact() {
                   d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                 />
               </svg>
-              <span>info@example.com</span>
+              <span>info@prestigedrive.com</span>
             </div>
             <div className="flex items-center space-x-4">
               <svg
@@ -43,7 +48,7 @@ export default function Contact() {
                   d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
                 />
               </svg>
-              <span>+1 (123) 456-7890</span>
+              <span>+44 (0) 7777777</span>
             </div>
             <div className="flex items-center space-x-4">
               <svg
@@ -66,7 +71,7 @@ export default function Contact() {
                   d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                 />
               </svg>
-              <span>123 Main St, City, Country</span>
+              <span>41 Westfield Crescent, Brighton, UK. BN1 8JB</span>
             </div>
           </div>
           {/* Social Media Links */}
@@ -169,7 +174,7 @@ export default function Contact() {
       {/* Map */}
       <div className="mt-16">
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.8354345093747!2d144.95373531531664!3d-37.816279742021665!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xf577d2d2b2a1c1b4!2s123%20Main%20St%2C%20City%2C%20Country!5e0!3m2!1sen!2sus!4v1622549400000!5m2!1sen!2sus"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1294.9100700061645!2d-0.13624394495045125!3d50.857099802058364!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48758509f6294167%3A0x9cc6af7a727d0ef9!2sBrighton%2C%20Brighton%20and%20Hove%2C%20UK!5e0!3m2!1sen!2seg!4v1738465102416!5m2!1sen!2seg"
           width="100%"
           height="400"
           style={{ border: 0 }}

@@ -1,11 +1,13 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { FaSearch, FaFilter } from "react-icons/fa";
+import { FaSearch, FaPlane, FaCalendar, FaBars } from "react-icons/fa";
 import { carsData } from "@/constants";
 import Card from "./Card";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { StaticImageData } from "next/image";
+import { useRouter } from "next/navigation";
+import Button from "./Button";
 
 interface Car {
   id: string;
@@ -26,8 +28,8 @@ const SearchBar = () => {
   const [dropoffLocation, setDropoffLocation] = useState("");
   const [pickupDate, setPickupDate] = useState<Date | null>(null);
   const [dropoffDate, setDropoffDate] = useState<Date | null>(null);
-  const [pickupTime, setPickupTime] = useState("");
-  const [dropoffTime, setDropoffTime] = useState("");
+  const [pickupTime, setPickupTime] = useState("12:30");
+  const [dropoffTime, setDropoffTime] = useState("08:30");
   const [showFilters, setShowFilters] = useState(false);
   const [carType, setCarType] = useState("");
   const [priceRange, setPriceRange] = useState("");
@@ -36,88 +38,70 @@ const SearchBar = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [hasSearched, setHasSearched] = useState(false);
+  const [isNavbarVisible, setIsNavbarVisible] = useState(true);
+  const [showDropoffInput, setShowDropoffInput] = useState(false);
+  const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
+  const router = useRouter();
 
-  const validateInputs = () => {
-    const newErrors: { [key: string]: string } = {};
-
-    if (!pickupLocation) newErrors.pickupLocation = "Pickup location is required.";
-    if (!dropoffLocation) newErrors.dropoffLocation = "Dropoff location is required.";
-    if (!pickupDate) newErrors.pickupDate = "Pickup date is required.";
-    if (!dropoffDate) newErrors.dropoffDate = "Dropoff date is required.";
-    if (pickupDate && dropoffDate && new Date(dropoffDate) <= new Date(pickupDate)) {
-      newErrors.dropoffDate = "Dropoff date must be after the pickup date.";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSearch = () => {
-    if (!validateInputs()) return;
-
-    setIsLoading(true);
-    setHasSearched(true);
-
-    setTimeout(() => {
-      const results = carsData.filter((car) => {
-        const matchesType = carType ? car.type.toLowerCase() === carType.toLowerCase() : true;
-        const matchesPrice = priceRange ? car.price <= parseInt(priceRange, 10) : true;
-        const matchesTransmission = transmission ? car.transmission === transmission : true;
-
-        return matchesType && matchesPrice && matchesTransmission;
-      });
-
-      setSearchResults(results);
-      setIsLoading(false);
-    }, 1000);
-  };
-
-  // Auto-trigger search when filters change
   useEffect(() => {
-    if (hasSearched) {
-      handleSearch();
-    }
-  }, [carType, priceRange, transmission]);
+    let lastScrollY = window.scrollY;
 
-  const getSimilarCars = () => {
-    if (searchResults.length === 0 && hasSearched) {
-      return carsData
-        .filter((car) => {
-          const matchesType = carType ? car.type.toLowerCase() === carType.toLowerCase() : true;
-          const matchesTransmission = transmission ? car.transmission === transmission : true;
-          const matchesPrice = priceRange ? car.price <= parseInt(priceRange, 10) : true;
+    const handleScroll = () => {
+      if (window.scrollY > lastScrollY && window.scrollY > 100) {
+        setIsNavbarVisible(false); // Hide navbar on scroll down
+      } else {
+        setIsNavbarVisible(true); // Show navbar on scroll up
+      }
+      lastScrollY = window.scrollY;
+    };
 
-          return matchesType || matchesTransmission || matchesPrice;
-        })
-        .slice(0, 3);
-    }
-    return [];
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleShowCars = () => {
+    router.push("/cars");
+  };
+
+  const toggleSearchBar = () => {
+    setIsSearchBarVisible(!isSearchBarVisible);
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-lg">
+    <div className={`fixed top-0 left-0 right-0 border-p z-40 bg-white p-6 container rounded-lg shadow-lg transition-transform duration-300 ${
+      isNavbarVisible ? 'translate-y-20' : 'translate-y-0'
+    }`}>
+      {/* Toggle Button for Smaller Screens */}
+      <button
+        className="md:hidden absolute top-2 right-4 p-2 bg-gray-200 rounded-lg"
+        onClick={toggleSearchBar}
+      >
+        <FaBars className="text-gray-700" />
+      </button>
+
       {/* Search Form */}
-      <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
+      <div className={`flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4 ${
+        isSearchBarVisible ? 'block' : 'hidden md:flex'
+      }`}>
         {/* Pickup Location */}
         <div className="flex-1">
           <label className="block text-sm font-medium text-gray-700">
             Pickup Location
           </label>
-          <select
-            className="mt-1 w-full p-2 border rounded-md"
-            value={pickupLocation}
-            onChange={(e) => setPickupLocation(e.target.value)}
-          >
-            <option value="" disabled>
-              Choose pickup location
-            </option>
-            <option value="brighton">Brighton</option>
-            <option value="airport">London Airport</option>
-            <option value="manchester">Manchester</option>
-          </select>
-          {errors.pickupLocation && (
-            <p className="text-red-500 text-sm mt-1">{errors.pickupLocation}</p>
-          )}
+          <div className="relative mt-1">
+            <select
+              className="w-full p-2 border rounded-md pl-10"
+              value={pickupLocation}
+              onChange={(e) => setPickupLocation(e.target.value)}
+            >
+              <option value="" disabled>
+                Choose pickup location
+              </option>
+              <option value="brighton-airport">Brighton Airport</option>
+              <option value="heathrow-airport">Heathrow Airport</option>
+            </select>
+            <FaPlane className="absolute left-3 top-3 text-gray-500" />
+          </div>
         </div>
 
         {/* Dropoff Location */}
@@ -125,21 +109,29 @@ const SearchBar = () => {
           <label className="block text-sm font-medium text-gray-700">
             Dropoff Location
           </label>
-          <select
-            className="mt-1 w-full p-2 border rounded-md"
-            value={dropoffLocation}
-            onChange={(e) => setDropoffLocation(e.target.value)}
-          >
-            <option value="" disabled>
-              Choose dropoff location
-            </option>
-            <option value="brighton">Brighton</option>
-            <option value="airport">London Airport</option>
-            <option value="manchester">Manchester</option>
-          </select>
-          {errors.dropoffLocation && (
-            <p className="text-red-500 text-sm mt-1">{errors.dropoffLocation}</p>
-          )}
+          <div className="relative mt-1">
+            {showDropoffInput ? (
+              <select
+                className="w-full p-2 border rounded-md pl-10"
+                value={dropoffLocation}
+                onChange={(e) => setDropoffLocation(e.target.value)}
+              >
+                <option value="" disabled>
+                  Choose dropoff location
+                </option>
+                <option value="brighton-airport">Brighton Airport</option>
+                <option value="heathrow-airport">Heathrow Airport</option>
+              </select>
+            ) : (
+              <p
+                className="text-sm text-gray-500 cursor-pointer"
+                onClick={() => setShowDropoffInput(true)}
+              >
+                Different than pickup location?
+              </p>
+            )}
+            {showDropoffInput && <FaPlane className="absolute left-3 top-3 text-gray-500" />}
+          </div>
         </div>
 
         {/* Pickup Date and Time */}
@@ -148,22 +140,25 @@ const SearchBar = () => {
             Pickup Date
           </label>
           <div className="flex space-x-2">
-            <DatePicker
-              selected={pickupDate}
-              onChange={(date) => setPickupDate(date)}
-              className="mt-1 w-full p-2 border rounded-md"
-              dateFormat="dd/MM/yyyy"
-            />
-            <input
-              type="time"
-              className="mt-1 w-full p-2 border rounded-md"
-              value={pickupTime}
-              onChange={(e) => setPickupTime(e.target.value)}
-            />
+            <div className="relative flex-1">
+              <DatePicker
+                selected={pickupDate}
+                onChange={(date) => setPickupDate(date)}
+                className="w-full p-2 border rounded-md pl-10"
+                dateFormat="dd/MM/yyyy"
+                placeholderText="Pickup date"
+              />
+              <FaCalendar className="absolute left-3 top-3 text-gray-500" />
+            </div>
+            {pickupDate && (
+              <input
+                type="time"
+                className="w-1/3 p-2 border rounded-md"
+                value={pickupTime}
+                onChange={(e) => setPickupTime(e.target.value)}
+              />
+            )}
           </div>
-          {errors.pickupDate && (
-            <p className="text-red-500 text-sm mt-1">{errors.pickupDate}</p>
-          )}
         </div>
 
         {/* Dropoff Date and Time */}
@@ -172,39 +167,35 @@ const SearchBar = () => {
             Dropoff Date
           </label>
           <div className="flex space-x-2">
-            <DatePicker
-              selected={dropoffDate}
-              onChange={(date) => setDropoffDate(date)}
-              className="mt-1 w-full p-2 border rounded-md"
-              dateFormat="dd/MM/yyyy"
-              minDate={pickupDate || undefined}
-            />
-            <input
-              type="time"
-              className="mt-1 w-full p-2 border rounded-md"
-              value={dropoffTime}
-              onChange={(e) => setDropoffTime(e.target.value)}
-            />
+            <div className="relative flex-1">
+              <DatePicker
+                selected={dropoffDate}
+                onChange={(date) => setDropoffDate(date)}
+                className="w-full p-2 border rounded-md pl-10"
+                dateFormat="dd/MM/yyyy"
+                placeholderText="Dropoff date"
+                minDate={pickupDate || undefined}
+              />
+              <FaCalendar className="absolute left-3 top-3 text-gray-500" />
+            </div>
+            {dropoffDate && (
+              <input
+                type="time"
+                className="w-1/3 p-2 border rounded-md"
+                value={dropoffTime}
+                onChange={(e) => setDropoffTime(e.target.value)}
+              />
+            )}
           </div>
-          {errors.dropoffDate && (
-            <p className="text-red-500 text-sm mt-1">{errors.dropoffDate}</p>
-          )}
         </div>
 
-        {/* Search and Filter Buttons */}
+        {/* Show Cars Button */}
         <div className="flex space-x-4">
-          <button
-            onClick={handleSearch}
-            className="bg-blue-600 text-white px-4 py-2 rounded-md flex items-center"
+          <Button
+            href="/cars"
           >
-            <FaSearch className="mr-2" /> Search
-          </button>
-          <button
-            onClick={() => setShowFilters(!showFilters)}
-            className="bg-blue-600 text-white px-4 py-2 rounded-md flex items-center"
-          >
-            <FaFilter className="mr-2" /> Filters
-          </button>
+            Show Cars
+          </Button>
         </div>
       </div>
 
@@ -266,86 +257,6 @@ const SearchBar = () => {
           </div>
         </div>
       )}
-
-      {/* Error Messages */}
-      {/* {Object.keys(errors).length > 0 && (
-        <div className="text-red-500 mt-4">
-          {Object.values(errors).map((error, index) => (
-            <p key={index}>{error}</p>
-          ))}
-        </div>
-      )} */}
-
-      {/* Search Results */}
-      <div className="mt-6">
-        {isLoading ? (
-          <div className="flex justify-center items-center">
-            <svg
-              className="animate-spin h-8 w-8 text-blue-600"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              ></circle>
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-              ></path>
-            </svg>
-          </div>
-        ) : searchResults.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {searchResults.map((car) => (
-              <Card
-                key={car.id}
-                image={car.image}
-                title={car.title}
-                price={car.price}
-                features={car.features}
-                type={car.type}
-                fuelType={car.fuelType}
-                mileage={car.mileage}
-                year={car.year}
-                transmission={car.transmission}
-                href={car.href}
-                id={car.id}
-              />
-            ))}
-          </div>
-        ) : (
-          hasSearched && (
-            <div>
-              <p>No cars found matching your criteria. Here are some similar options:</p>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {getSimilarCars().map((car) => (
-                  <Card
-                    key={car.id}
-                    image={car.image}
-                    title={car.title}
-                    price={car.price}
-                    features={car.features}
-                    type={car.type}
-                    fuelType={car.fuelType}
-                    mileage={car.mileage}
-                    year={car.year}
-                    transmission={car.transmission}
-                    href={car.href}
-                    id={car.id}
-                  />
-                ))}
-              </div>
-            </div>
-          )
-        )}
-      </div>
     </div>
   );
 };

@@ -14,8 +14,17 @@ import carrental from '../../public/assets/carrental.webp';
 import chauffeur from '../../public/assets/chauffeur.jpg';
 import event from '../../public/assets/event.jpg';
 import corporate from '../../public/assets/corporate.jpg';
-
-
+import mercedesAclass from '../../public/assets/mercedesAclass.jpg';
+import tesla from '../../public/assets/tesla.jpg';
+import bmw5 from '../../public/assets/bmw5.webp';
+import rangerover from '../../public/assets/landrover.jpg';
+import mercedesCclass from '../../public/assets/mercedesCclass.jpg';
+import volvo from '../../public/assets/volvo.jpg';
+import aboutus from '../../public/assets/aboutus.jpg';
+import blog1 from '../../public/assets/ukdriving.jpg';
+import blog2 from '../../public/assets/carinsurance.png';
+import blog3 from '../../public/assets/happyrental.jpg';
+import error from '../../public/assets/error.webp';
 
 export { 
     Car, 
@@ -34,4 +43,15 @@ export {
     chauffeur,
     event,
     corporate,
+    mercedesAclass,
+    tesla,
+    bmw5,
+    rangerover,
+    mercedesCclass,
+    volvo,
+    aboutus,
+    blog1,
+    blog2,
+    blog3,
+    error
  };

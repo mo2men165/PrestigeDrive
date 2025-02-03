@@ -8,13 +8,6 @@ import { Navigation } from 'swiper/modules';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-// interface Testimonial {
-//   id: number;
-//   quote: string;
-//   name: string;
-//   date: string;
-// }
-
 const Testimonials = () => {
   return (
     <section className="py-12 px-4 bg-gray-50 rounded-lg my-16 relative">
@@ -23,23 +16,29 @@ const Testimonials = () => {
       </h2>
       <Swiper
         spaceBetween={30}
-        slidesPerView={2}
+        slidesPerView={1} // Default for mobile
         navigation={true}
         modules={[Navigation]}
         breakpoints={{
+          // When screen width is >= 640px (tablets)
           640: {
             slidesPerView: 1,
           },
-          1024: {
+          // When screen width is >= 768px (small desktops)
+          768: {
             slidesPerView: 2,
+          },
+          // When screen width is >= 1024px (desktops)
+          1024: {
+            slidesPerView: 3,
           },
         }}
       >
         {testimonials.map((testimonial) => (
-          <SwiperSlide key={testimonial.id} className='p-20'>
-            <div className="mx-2 p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+          <SwiperSlide key={testimonial.id} className="p-4 sm:p-6 lg:p-8">
+            <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow">
               <p className="text-sm text-gray-600 italic mb-4">
-              {`"${testimonial.quote}"`}
+                {`"${testimonial.quote}"`}
               </p>
               <h4 className="text-lg font-semibold text-blue-600">
                 - {testimonial.name}

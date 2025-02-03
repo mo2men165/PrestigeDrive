@@ -29,7 +29,7 @@ const WhyChooseUs = () => {
 
   return (
     <section className="mx-auto px-4 py-12 my-16">
-      <h2 className="text-4xl font-sans font-bold text-center uppercase mb-12 text-gray-800">
+      <h2 className="text-4xl font-sans font-bold text-center uppercase mb-12 text-primary">
         Why Choose Us?
       </h2>
 

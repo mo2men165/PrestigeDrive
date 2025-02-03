@@ -5,7 +5,6 @@ import Image, { StaticImageData } from 'next/image';
 interface CardProps {
   image: string | StaticImageData;
   title: string;
-  price: Number | string;
   features: string[];
   type: string;
   fuelType: string;
@@ -14,12 +13,12 @@ interface CardProps {
   transmission: string;
   href: string;
   id: string;
+  price? : number;
 }
 
 export default function Card({
   image,
   title,
-  price,
   features,
   type,
   fuelType,
@@ -44,7 +43,6 @@ export default function Card({
       {/* Content */}
       <div className="p-4">
         <h2 className="text-xl font-bold text-secondary mb-2">{title}</h2>
-        <p className="text-lg font-semibold text-gray-500 mb-4"> From  £{price.toString()} /day</p>
 
         {/* Additional Details */}
         <div className="space-y-2 text-sm text-gray-400 mb-4">
@@ -70,10 +68,14 @@ export default function Card({
           ))}
         </ul>
 
-        {/* Button */}
-        <Button variant="primary" href={`/cars/${id}`}>
+        <div className="flex items-center justify-start gap-8">
+        <Button variant="primary" href={`/booking/${id}`}>
+          Book Now
+        </Button>
+        <Button variant="secondary" href={`/cars/${id}`}>
           View Details
         </Button>
+        </div>
       </div>
     </div>
   );

@@ -20,19 +20,11 @@ export default function CarsPage() {
   };
 
   const filteredCars = carsData
-    .filter((car) => car.price >= filters.priceRange[0] && car.price <= filters.priceRange[1])
     .filter((car) => (filters.transmission === 'All' ? true : car.transmission === filters.transmission))
     .filter((car) => (filters.feature ? car.features.includes(filters.feature) : true))
     .filter((car) => (filters.type === 'All' ? true : car.type === filters.type))
     .filter((car) => (filters.fuelType === 'All' ? true : car.fuelType === filters.fuelType))
     .filter((car) => (filters.year === 'All' ? true : car.year.toString() === filters.year))
-    .sort((a, b) => {
-      if (filters.sortBy === 'priceLowToHigh') return a.price - b.price;
-      if (filters.sortBy === 'priceHighToLow') return b.price - a.price;
-      if (filters.sortBy === 'nameAZ') return a.title.localeCompare(b.title);
-      if (filters.sortBy === 'nameZA') return b.title.localeCompare(a.title);
-      return 0;
-    });
 
   // Extract unique values for type, fuelType, and year for dropdown options
   const uniqueTypes = [...new Set(carsData.map((car) => car.type))];
@@ -40,26 +32,17 @@ export default function CarsPage() {
   const uniqueYears = [...new Set(carsData.map((car) => car.year.toString()))].sort((a:any, b:any) => b - a);
 
   return (
-    <section className="container mx-auto py-12">
+    <section className="container mx-auto py-12 my-10">
+       <div className="bg-gradient-to-r from-purple-950 to-purple-700 rounded-lg p-8 text-white mb-12">
+        <h2 className="text-4xl font-bold mb-4">Our Fleet</h2>
+        <p className="text-lg leading-8">
+          If it's luxury vehicles, SUVs or electric vehicles that you're looking for, we got it all right here.
+        </p>
+      </div>      
       {/* Filters */}
       <div className="mb-8 p-4 bg-neutral rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold mb-4">Filters</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Price Range */}
-          <div>
-            <label className="block text-sm font-medium mb-2">Price Range (£)</label>
-            <input
-              type="range"
-              min="0"
-              max="200"
-              step="10"
-              value={filters.priceRange[1]}
-              onChange={(e) => handleFilterChange('priceRange', [0, +e.target.value])}
-              className="w-full"
-            />
-            <p className="text-sm text-gray-500 mt-1">Up to £{filters.priceRange[1]}</p>
-          </div>
-
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Transmission */}
           <div>
             <label className="block text-sm font-medium mb-2">Transmission</label>
@@ -159,14 +142,13 @@ export default function CarsPage() {
       </div>
 
       {/* Car Listings */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 my-10">
         {filteredCars.length > 0 ? (
           filteredCars.map((car) => (
             <Card
               key={car.id}
               image={car.image}
               title={car.title}
-              price={car.price}
               features={car.features}
               type={car.type}
               fuelType={car.fuelType}

@@ -10,13 +10,8 @@ const Footer = () => {
       <div className="container mx-auto px-4">
         {/* Logo and Tagline */}
         <div className="text-center mb-8">
-          <Image
-            src={logo} // Replace with your logo path
-            alt="CarRental Logo"
-            width={150}
-            height={50}
-            className="mx-auto"
-          />
+          <h4 className='font-serif text-2xl font-bold'>Prestige Drive</h4>
+
           <p className="mt-4 text-gray-400">
             Your trusted partner for luxury car rentals.
           </p>
@@ -48,7 +43,7 @@ const Footer = () => {
               {services.map((service, index) => (
                 <li key={index}>
                   <Link
-                    href={service.href}
+                    href={`/services`}
                     className="text-gray-400 hover:text-secondary transition-colors"
                   >
                     {service.name}
@@ -95,7 +90,7 @@ const Footer = () => {
         {/* Copyright Notice */}
         <div className="text-center border-t border-gray-800 pt-6">
           <p className="text-gray-400">
-            &copy; {new Date().getFullYear()} CarRental. All Rights Reserved.
+            &copy; {new Date().getFullYear()} Prestige Drive. All Rights Reserved.
           </p>
         </div>
       </div>

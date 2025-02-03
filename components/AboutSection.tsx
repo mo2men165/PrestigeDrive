@@ -1,28 +1,28 @@
 import React from 'react';
 import Image from 'next/image';
-import { logo, pd } from '@/public/assets';
+import { aboutus, logo, pd } from '@/public/assets';
 import Button from './Button';
 
 const AboutSection = () => {
   return (
     <section className="mx-auto px-4 py-20 my-16">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
         {/* Image Column */}
-        <div className="order-1 p-20 md:order-none">
+        <div className="order-1 p-20 md:order-none lg:block hidden">
           <Image
-            src={logo}
+            src={aboutus}
             alt="About Us"
             width={600}
-            height={400}
-            className="rounded-lg shadow-lg"
+            height={600}
+            className="rounded-lg shadow-lg "
           />
         </div>
 
         {/* Text Column */}
-        <div className="">
-          <h2 className="text-4xl my-6 font-sans font-bold text-secondary">
-            About Us
-          </h2>
+        <div className="w-[100%] text-center">
+        <div className="bg-gradient-to-r from-purple-950 to-purple-700 rounded-lg p-8 text-white mb-12">
+        <h1 className="text-4xl font-bold mb-4">About Us</h1>
+      </div>  
           <p className="text-lg my-6 text-gray-800">
             At <strong>Prestige Drive</strong>, we are passionate about bringing luxury within reach. Based in London and serving the UK and Ireland, we specialize in providing premium car rentals at economical prices, ensuring that everyone can experience the thrill of driving a high-end vehicle.
           </p>
@@ -32,7 +32,7 @@ const AboutSection = () => {
           <p className="text-lg my-6 text-gray-800">
             Our mission is simple: to make luxury car rentals <strong>accessible, affordable, and stress-free</strong>. With competitive pricing, exceptional customer service, and a commitment to excellence, we ensure that every journey with Prestige Drive is as memorable as your destination.
           </p>
-          <Button variant="primary" href="/about">
+          <Button variant="primary" href="/services">
             Learn More
           </Button>
         </div>

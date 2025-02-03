@@ -16,14 +16,19 @@ export default function OurServices() {
   return (
     <section className="container mx-auto py-12 my-16">
       {/* Centered Header */}
-      <motion.h1
-        className="text-4xl font-bold text-center mb-16"
+      <div className="bg-gradient-to-r from-purple-950 to-purple-700 rounded-lg p-8 text-white mb-12">
+      <motion.h2
+        className="text-4xl font-bold"
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
         Our Services
-      </motion.h1>
+      </motion.h2>
+        <p className="text-lg leading-8">
+          See our wide range of services below
+        </p>
+      </div>      
 
       {/* Section 1: Image on the left, text on the right */}
       <motion.div

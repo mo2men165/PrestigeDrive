@@ -3,30 +3,26 @@ import Button from './Button';
 
 export default function Hero() {
   return (
-    <section className="relative h-[100vh] flex items-center">
+    <section className="relative h-[100vh] flex items-end">
       {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('/assets/hero-bg.jpg')" }}
+        style={{ backgroundImage: "url('/assets/hero.jpg')" }}
       ></div>
 
       {/* Overlay with Reduced Opacity */}
-      <div
-        className="absolute inset-0 bg-[#10131A] opacity-70"
-      ></div>
+      <div className="absolute inset-0 bg-black/40"></div>
 
-      {/* Content */}
-      <div className="relative container mx-auto text-center px-4">
-        <h1 className="text-4xl md:text-6xl font-script  text-secondary mb-4">
-          Drive in Luxury, Arrive in Style
-        </h1>
-        <p className="text-lg md:text-2xl font-serif text-white mb-8">
-          Experience high-end car rentals with chauffeur options at economical
-          prices in Brighton, UK.
-        </p>
-        <Button variant="primary" href="/cars">
-          Explore Our Fleet
-        </Button>
+      {/* Content Container with Subtle Gold Background */}
+      <div className="relative w-full bg-purple-950 py-12">
+        <div className="container mx-auto text-center px-4">
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
+            Drive in Luxury, Arrive in Style
+          </h1>
+          <p className="text-lg md:text-2xl text-gray-200 mb-4">
+          Discover premium car rentals with professional chauffeur services.
+          </p>
+        </div>
       </div>
     </section>
   );

@@ -9,7 +9,7 @@ module.exports = {
   theme: {
   	extend: {
   		colors: {
-  			primary: "#1A202C",
+  			primary: "#3b0764",
   			secondary: "#F4B400",
   			neutral: '#EDEDED',
   			background: 'hsl(var(--background))',
