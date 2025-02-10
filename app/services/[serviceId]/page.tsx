@@ -93,7 +93,6 @@ export default function BookingForm() {
 const service = serviceTypes.find((service) => service.id === defaultServiceType);
 const serviceName = service ? service.name : 'Unknown Service';
 
-
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <section className="container mx-auto py-12 my-16">

@@ -5,6 +5,7 @@ import Footer from '../components/Footer';
 import { RentalProvider } from './contexts/RentalContext';
 import PrivacyPolicyBar from '@/components/PrivacyPolicyBar';
 import ChatButton from '@/components/ChatButton';
+import { Suspense } from 'react';
 
 export const metadata = {
   title: 'Prestige Drive',
@@ -28,13 +29,15 @@ export default function RootLayout({
       </head>
 
       <body id='root' className="flex flex-col min-h-screen">
-        <RentalProvider> {/* Wrap the entire app with RentalProvider */}
+        <Suspense fallback={<div>Loading...</div>}>
+        <RentalProvider>
           <Navbar />
           <main className="flex-grow">{children}</main>
           <ChatButton />
           <PrivacyPolicyBar />
           <Footer />
         </RentalProvider>
+        </Suspense>
       </body>
     </html>
   );
