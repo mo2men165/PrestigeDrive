@@ -4,8 +4,8 @@ import { createContext, useContext, useState } from 'react';
 interface RentalData {
   pickupLocation: string;
   dropoffLocation: string;
-  pickupDate: Date | null;
-  dropoffDate: Date | null;
+  pickupDate: Date | any;
+  dropoffDate: Date | any;
   pickupTime: string;
   dropoffTime: string;
   basePrice: number;
