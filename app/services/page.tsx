@@ -6,6 +6,7 @@ import CTABanner from '@/components/CTABanner';
 import Image from 'next/image';
 import { carrental, chauffeur, corporate, event } from '@/public/assets';
 import Button from '@/components/Button';
+import { Suspense } from 'react';
 
 const sectionVariants = {
   hidden: { opacity: 0, y: 50 },
@@ -17,7 +18,8 @@ export default function OurServices() {
   const selectedService = searchParams.get('service');
 
   return (
-    <section className="container mx-auto py-12 my-16">
+    <Suspense fallback={<div>Loading...</div>}>
+      <section className="container mx-auto py-12 my-16">
       {/* Centered Header */}
       <div className="bg-gradient-to-r from-[#0E253F] to-[#1B365D] rounded-lg p-8 text-white mb-12">
         <motion.h2
@@ -127,5 +129,6 @@ export default function OurServices() {
 
       <CTABanner />
     </section>
+    </Suspense>
   );
 }

@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import Card from '@/components/Card';
 import { carsData } from '@/constants';
 
-
 export default function CarsPage() {
 
   const [filters, setFilters] = useState({
@@ -31,7 +30,7 @@ export default function CarsPage() {
   const uniqueFuelTypes = [...new Set(carsData.map((car) => car.fuelType))];
 
   return (
-    <section className="container mx-auto py-12 my-10">
+    <section className="container mx-auto py-12 my-16">
        <div className="bg-gradient-to-r from-[#0E253F] to-[#1B365D] rounded-lg p-8 text-white mb-12">
         <h2 className="text-4xl font-bold mb-4">Our Fleet</h2>
         <p className="text-lg leading-8">

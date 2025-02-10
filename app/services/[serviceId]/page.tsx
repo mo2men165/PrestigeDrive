@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import { FaMapMarkerAlt } from 'react-icons/fa';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { locations } from '@/constants';
 import emailjs from 'emailjs-com';
 
@@ -95,7 +95,8 @@ const serviceName = service ? service.name : 'Unknown Service';
 
 
   return (
-    <section className="container mx-auto py-12 my-16">
+    <Suspense fallback={<div>Loading...</div>}>
+      <section className="container mx-auto py-12 my-16">
       {confirmationMessage && (
         <div className="bg-green-600 text-white p-4 rounded-md mb-8">
           <p>{confirmationMessage}</p>
@@ -326,5 +327,6 @@ const serviceName = service ? service.name : 'Unknown Service';
         </Formik>
       </div>
     </section>
+    </Suspense>
   );
 }

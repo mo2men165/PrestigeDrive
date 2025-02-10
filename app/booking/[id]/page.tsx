@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -10,20 +10,6 @@ import Modal from 'react-modal';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 import { useRentalData } from '@/app/contexts/RentalContext';
 import { useSearchParams } from "next/navigation";
-
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-    borderRadius: '12px',
-    padding: '24px',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-  },
-};
 
 const BookingSchema = Yup.object().shape({
   name: Yup.string().required('Name is required'),
@@ -169,7 +155,8 @@ export default function BookingPage() {
   };
 
   return (
-    <section className="container mx-auto py-12 my-16">
+    <Suspense fallback={<div>Loading...</div>}>
+      <section className="container mx-auto py-12 my-16">
       {confirmationMessage && (
         <div className="bg-green-600 text-white p-4 rounded-md mb-8">
           <p>{confirmationMessage}</p>
@@ -560,5 +547,6 @@ export default function BookingPage() {
               )}
             </Modal>
     </section>
+    </Suspense>
   );
 }

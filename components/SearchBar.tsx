@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FaPlane, FaCalendar, FaChevronDown, FaChevronUp, FaMapMarkerAlt } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -43,12 +43,27 @@ const SearchBar = () => {
       dropoffTime: updatedData.dropoffTime,
     });
   
-
-    console.log("Updated Rental Data:", updatedData); // Debugging
-
-    // Navigate to the cars page
     router.push(`/cars?${queryParams.toString()}`);
   };
+
+  const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
+        setIsNavbarVisible(false); // Hide navbar → Move search bar up
+      } else {
+        setIsNavbarVisible(true); // Show navbar → Move search bar down
+      }
+
+      lastScrollY.current = currentScrollY; // Update ref value
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <div
