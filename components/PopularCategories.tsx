@@ -22,7 +22,7 @@ const PopularCategories = () => {
               className="w-full h-48 object-cover"
             />
             <div className="p-4 text-center">
-              <h3 className="text-xl font-bold text-secondary mb-2">
+              <h3 className="text-xl font-bold text-primary mb-2">
                 {category.title}
               </h3>
               {/* Add the description here */}

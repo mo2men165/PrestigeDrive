@@ -11,13 +11,14 @@ import 'swiper/css/pagination';
 const Testimonials = () => {
   return (
     <section className="py-12 px-4 bg-gray-50 rounded-lg my-16 relative">
-      <h2 className="text-4xl font-bold text-center uppercase mb-8 text-gray-800">
+      <h2 className="text-4xl font-bold text-center uppercase mb-8 text-primary">
         What Our Customers Say
       </h2>
       <Swiper
         spaceBetween={30}
         slidesPerView={1} // Default for mobile
         navigation={true}
+        loop
         modules={[Navigation]}
         breakpoints={{
           // When screen width is >= 640px (tablets)

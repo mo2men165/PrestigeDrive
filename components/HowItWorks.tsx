@@ -6,19 +6,19 @@ import { FaSearch, FaCalendarCheck, FaCar } from 'react-icons/fa';
 const steps = [
   {
     id: 1,
-    icon: <FaSearch className="text-4xl text-blue-600 mb-4" />,
+    icon: <FaSearch className="text-4xl text-primary mb-4" />,
     title: 'Search',
     description: 'Find the perfect car for your needs.',
   },
   {
     id: 2,
-    icon: <FaCalendarCheck className="text-4xl text-blue-600 mb-4" />,
+    icon: <FaCalendarCheck className="text-4xl text-primary mb-4" />,
     title: 'Book',
     description: 'Select your dates and confirm your booking.',
   },
   {
     id: 3,
-    icon: <FaCar className="text-4xl text-blue-600 mb-4" />,
+    icon: <FaCar className="text-4xl text-primary mb-4" />,
     title: 'Drive',
     description: 'Pick up your car and hit the road!',
   },

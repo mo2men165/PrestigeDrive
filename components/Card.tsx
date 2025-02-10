@@ -1,6 +1,8 @@
+'use client';
 import React from 'react';
 import Button from './Button';
 import Image, { StaticImageData } from 'next/image';
+import { useSearchParams } from 'next/navigation';
 
 interface CardProps {
   image: string | StaticImageData;
@@ -8,8 +10,7 @@ interface CardProps {
   features: string[];
   type: string;
   fuelType: string;
-  mileage: string;
-  year: number;
+
   transmission: string;
   href: string;
   id: string;
@@ -22,12 +23,12 @@ export default function Card({
   features,
   type,
   fuelType,
-  mileage,
-  year,
   transmission,
   href,
   id
 }: CardProps) {
+  const searchParams = useSearchParams();
+
   return (
     <div className="bg-neutral rounded-lg shadow-lg overflow-hidden transition-transform hover:scale-105">
       {/* Image */}
@@ -42,17 +43,13 @@ export default function Card({
 
       {/* Content */}
       <div className="p-4">
-        <h2 className="text-xl font-bold text-secondary mb-2">{title}</h2>
+        <h2 className="text-xl font-bold text-primary mb-2">{title}</h2>
 
         {/* Additional Details */}
-        <div className="space-y-2 text-sm text-gray-400 mb-4">
+        <div className="space-y-2 text-sm text-black mb-4">
           <div className="flex justify-between">
             <span><strong>Type:</strong> {type}</span>
             <span><strong>Fuel:</strong> {fuelType}</span>
-          </div>
-          <div className="flex justify-between">
-            <span><strong>Mileage:</strong> {mileage}</span>
-            <span><strong>Year:</strong> {year}</span>
           </div>
           <div className="flex justify-between">
             <span><strong>Transmission:</strong> {transmission}</span>
@@ -60,7 +57,7 @@ export default function Card({
         </div>
 
         {/* Features */}
-        <ul className="text-sm text-gray-400 mb-4">
+        <ul className="text-sm text-black mb-4">
           {features.map((feature, index) => (
             <li key={index} className="flex items-center gap-2">
               <span>•</span> {feature}
@@ -69,8 +66,8 @@ export default function Card({
         </ul>
 
         <div className="flex items-center justify-start gap-8">
-        <Button variant="primary" href={`/booking/${id}`}>
-          Book Now
+        <Button variant="primary" href={`/booking/${id}?${searchParams.toString()}`}>
+          Reserve Now
         </Button>
         <Button variant="secondary" href={`/cars/${id}`}>
           View Details

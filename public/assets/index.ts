@@ -1,4 +1,3 @@
-import Car from '../../public/assets/680.webp';
 import logo from '../../public/assets/logo.png';
 import family from '../../public/assets/familyy.jpg';
 import weekend from '../../public/assets/weekend.jpg';
@@ -14,20 +13,22 @@ import carrental from '../../public/assets/carrental.webp';
 import chauffeur from '../../public/assets/chauffeur.jpg';
 import event from '../../public/assets/event.jpg';
 import corporate from '../../public/assets/corporate.jpg';
-import mercedesAclass from '../../public/assets/mercedesAclass.jpg';
-import tesla from '../../public/assets/tesla.jpg';
+import mercedesAclass from '../../public/assets/mercedesAclass.png';
+import tesla from '../../public/assets/tesla.png';
 import bmw5 from '../../public/assets/bmw5.webp';
-import rangerover from '../../public/assets/landrover.jpg';
-import mercedesCclass from '../../public/assets/mercedesCclass.jpg';
-import volvo from '../../public/assets/volvo.jpg';
+import rangerover from '../../public/assets/landrover.png';
+import mercedesCclass from '../../public/assets/mercedesCclass.png';
+import volvo from '../../public/assets/volvo.png';
 import aboutus from '../../public/assets/aboutus.jpg';
 import blog1 from '../../public/assets/ukdriving.jpg';
 import blog2 from '../../public/assets/carinsurance.png';
 import blog3 from '../../public/assets/happyrental.jpg';
 import error from '../../public/assets/error.webp';
+import blackrock from '../../public/assets/BlackRock-logo.png'
+import closebrothers from '../../public/assets/closebrothers.png'
+import rac from '../../public/assets/rac.png'
 
 export { 
-    Car, 
     logo,
     family,
     weekend,
@@ -53,5 +54,8 @@ export {
     blog1,
     blog2,
     blog3,
-    error
+    error,
+    blackrock,
+    closebrothers,
+    rac
  };

@@ -14,12 +14,12 @@ export default function Hero() {
       <div className="absolute inset-0 bg-black/40"></div>
 
       {/* Content Container with Subtle Gold Background */}
-      <div className="relative w-full bg-purple-950 py-12">
+      <div className="relative w-full bg-primary py-12">
         <div className="container mx-auto text-center px-4">
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
+          <h1 className="text-4xl md:text-6xl font-bold text-text mb-4">
             Drive in Luxury, Arrive in Style
           </h1>
-          <p className="text-lg md:text-2xl text-gray-200 mb-4">
+          <p className="text-lg md:text-2xl text-gray-400 mb-4">
           Discover premium car rentals with professional chauffeur services.
           </p>
         </div>

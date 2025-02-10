@@ -14,8 +14,6 @@ interface Car {
   features: string[];
   type: string;
   fuelType: string;
-  mileage: string;
-  year: number;
   transmission: string;
   availability: string[];
   description: string; // Added description field
@@ -73,7 +71,7 @@ export default function CarDetailsPage() {
               variant='primary'
               className='w-[100%]'
             >
-              Book Now
+              Reserve Now
             </Button>
           </div>
         </div>
@@ -82,18 +80,18 @@ export default function CarDetailsPage() {
         {/* Car Details */}
         <div className="space-y-8">
           {/* Title */}
-          <div className="bg-gradient-to-r from-purple-950 to-purple-700 rounded-lg p-8 text-white mb-12">
+          <div className="bg-gradient-to-r from-[#0E253F] to-[#1B365D] rounded-lg p-8 text-white mb-12">
         <h1 className="text-4xl font-bold mb-4">{car.title}</h1>
         <p className="text-lg leading-8">
           {car.description}
         </p>
       </div> 
           <div className="bg-purple-50 p-6 rounded-xl shadow-sm">
-            <h2 className="text-2xl font-semibold text-purple-800 mb-4">Features</h2>
+            <h2 className="text-2xl font-semibold text-primary mb-4">Features</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {car.features.map((feature, index) => (
                 <div key={index} className="flex items-center space-x-3">
-                  <span className="text-purple-500">
+                  <span className="text-primary">
                     {feature.includes('GPS') && <FaMapMarkerAlt />}
                     {feature.includes('Chauffeur') && <FaChargingStation />}
                     {feature.includes('Luxury') && <FaSun />}
@@ -108,34 +106,28 @@ export default function CarDetailsPage() {
 
           {/* Details Section */}
           <div className="bg-purple-50 p-6 rounded-xl shadow-sm">
-            <h2 className="text-2xl font-semibold text-purple-800 mb-4">Details</h2>
+            <h2 className="text-2xl font-semibold text-primary mb-4">Details</h2>
             <div className="space-y-4">
               <div className="flex items-center space-x-3">
-                <FaCar className="text-purple-500" />
+                <FaCar className="text-primary" />
                 <span className="text-gray-700">Type: {car.type}</span>
               </div>
               <div className="flex items-center space-x-3">
-                <FaGasPump className="text-purple-500" />
+                <FaGasPump className="text-primary" />
                 <span className="text-gray-700">Fuel Type: {car.fuelType}</span>
               </div>
+
               <div className="flex items-center space-x-3">
-                <FaCalendarAlt className="text-purple-500" />
-                <span className="text-gray-700">Year: {car.year}</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <FaCogs className="text-purple-500" />
+                <FaCogs className="text-primary" />
                 <span className="text-gray-700">Transmission: {car.transmission}</span>
               </div>
+
               <div className="flex items-center space-x-3">
-                <FaTachometerAlt className="text-purple-500" />
-                <span className="text-gray-700">Mileage: {car.mileage}</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <FaUsers className="text-purple-500" />
+                <FaUsers className="text-primary" />
                 <span className="text-gray-700">Seats: {car.features.includes('4 Seats') ? '4' : '5'}</span>
               </div>
               <div className="flex items-center space-x-3">
-                <FaRoad className="text-purple-500" />
+                <FaRoad className="text-primary" />
                 <span className="text-gray-700">Drivetrain: {car.features.includes('All-Wheel Drive') ? 'AWD' : 'FWD'}</span>
               </div>
             </div>

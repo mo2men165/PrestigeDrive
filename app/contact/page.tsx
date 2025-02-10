@@ -2,7 +2,7 @@
 export default function Contact() {
   return (
     <section className="container mx-auto py-12 my-16">
-      <div className="bg-gradient-to-r from-purple-950 to-purple-700 rounded-lg p-8 text-white mb-12">
+      <div className="bg-gradient-to-r from-[#0E253F] to-[#1B365D] rounded-lg p-8 text-white mb-12">
         <h1 className="text-4xl font-bold mb-4">Contact Us</h1>
         <p className="text-lg leading-8">
           For all inquiries, feel free to reach out or leave your details and one of our experts will get in touch.

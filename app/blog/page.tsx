@@ -6,7 +6,7 @@ export default function Blog() {
   return (
     <section className="container mx-auto px-4 py-12 my-10">
       {/* Mini Hero Section */}
-      <div className="bg-gradient-to-r from-purple-950 to-purple-700 rounded-lg p-8 text-white mb-12">
+      <div className="bg-gradient-to-r from-[#0E253F] to-[#1B365D] rounded-lg p-8 text-white mb-12">
         <h2 className="text-4xl font-bold mb-4">Our Blog</h2>
         <p className="text-lg leading-8">
           Stay updated with the latest news, tips, and updates from Prestige Drive. Check back regularly for new posts!

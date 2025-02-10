@@ -51,7 +51,7 @@ const WhyChooseUs = () => {
                     : "#F5F0FF", // Light purple
               }}
             >
-              <div className="text-5xl mb-6 text-blue-600">
+              <div className="text-5xl mb-6 text-primary">
                 {React.createElement(feature.icon)}
               </div>
               <h3 className="text-2xl font-bold text-gray-800 mb-4">
@@ -69,7 +69,7 @@ const WhyChooseUs = () => {
               className="bg-white rounded-lg shadow-xl p-8 text-center transition-transform hover:scale-105"
               style={{ backgroundColor: "#F0F4FF" }} // Light blue
             >
-              <div className="text-5xl mb-6 text-blue-600">
+              <div className="text-5xl mb-6 text-primary">
                 {React.createElement(features[0].icon)}
               </div>
               <h3 className="text-2xl font-bold text-gray-800 mb-4">
@@ -83,7 +83,7 @@ const WhyChooseUs = () => {
               className="bg-white rounded-lg shadow-xl p-8 text-center transition-transform hover:scale-105"
               style={{ backgroundColor: "#FFF7F0" }} // Light orange
             >
-              <div className="text-5xl mb-6 text-blue-600">
+              <div className="text-5xl mb-6 text-primary">
                 {React.createElement(features[1].icon)}
               </div>
               <h3 className="text-2xl font-bold text-gray-800 mb-4">
@@ -99,7 +99,7 @@ const WhyChooseUs = () => {
               className="bg-white rounded-lg shadow-xl p-8 text-center transition-transform hover:scale-105"
               style={{ backgroundColor: "#F0FFF4" }} // Light green
             >
-              <div className="text-5xl mb-6 text-blue-600">
+              <div className="text-5xl mb-6 text-primary">
                 {React.createElement(features[2].icon)}
               </div>
               <h3 className="text-2xl font-bold text-gray-800 mb-4">
@@ -115,7 +115,7 @@ const WhyChooseUs = () => {
               className="bg-white rounded-lg shadow-xl p-8 text-center transition-transform hover:scale-105 h-full"
               style={{ backgroundColor: "#F5F0FF" }} // Light purple
             >
-              <div className="text-5xl mb-6 text-blue-600">
+              <div className="text-5xl mb-6 text-primary">
                 {React.createElement(features[3].icon)}
               </div>
               <h3 className="text-2xl font-bold text-gray-800 mb-4">

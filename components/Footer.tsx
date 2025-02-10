@@ -6,11 +6,10 @@ import { logo } from '@/public/assets';
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-white py-12">
-      <div className="container mx-auto px-4">
-        {/* Logo and Tagline */}
-        <div className="text-center mb-8">
-          <h4 className='font-serif text-2xl font-bold'>Prestige Drive</h4>
+    <footer className="bg-[#0C1C2E] text-white py-12">
+      <div className="container mx-auto px-4 ">
+        <div className="mb-8 flex flex-col justify-center items-center">
+            <Image src={logo} alt="Prestige Drive" width={200} height={100} />
 
           <p className="mt-4 text-gray-400">
             Your trusted partner for luxury car rentals.

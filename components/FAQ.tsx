@@ -26,7 +26,7 @@ const FAQ = () => {
           {faqs.map((faq) => (
             <AccordionItem key={faq.id} value={faq.id} className='bg-white'>
               <AccordionTrigger className="text-left text-black">
-                <h3 className="text-lg font-bold text-secondary">
+                <h3 className="text-lg font-bold text-primary">
                   {faq.question}
                 </h3>
               </AccordionTrigger>

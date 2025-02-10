@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { navLinks } from '@/constants';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
+import { logo } from '@/public/assets';
 
 const Navbar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -50,7 +52,7 @@ const Navbar = () => {
         <div className="container mx-auto flex justify-between items-center py-4 px-6">
           {/* Hamburger Menu Button */}
           <button
-            className="p-2 rounded-full hover:bg-purple-950 text-purple-950 hover:text-white transition-colors focus:outline-none"
+            className="p-2 rounded-full hover:bg-primary text-primary hover:text-white transition-colors focus:outline-none"
             onClick={toggleSidebar}
           >
             <svg
@@ -70,9 +72,15 @@ const Navbar = () => {
           </button>
 
           {/* Brand Name */}
-          <h1 className="text-2xl font-bold text-primary font-serif cursor-pointer" onClick={homeNavigate}>
+          <Image
+          src={logo}
+          alt='Prestige Drive'
+          width={200}
+          height={200} 
+          />
+          {/* <h1 className="text-2xl font-extrabold text-primary font-serif cursor-pointer" onClick={homeNavigate}>
             Prestige Drive
-          </h1>
+          </h1> */}
         </div>
       </nav>
 
@@ -100,7 +108,7 @@ const Navbar = () => {
               <div className="p-6">
                 {/* Close Button */}
                 <button
-                  className="absolute top-4 right-4 p-2 rounded-full hover:bg-purple-950 text-purple-950 hover:text-white transition-colors focus:outline-none"
+                  className="absolute top-4 right-4 p-2 rounded-full hover:bg-primary text-primary hover:text-white transition-colors focus:outline-none"
                   onClick={toggleSidebar}
                 >
                   <svg
@@ -125,8 +133,8 @@ const Navbar = () => {
                     <li key={link.href}>
                       <Link
                         href={link.href}
-                        className={`block hover:text-purple-950 transition-colors duration-200 ${
-                          isActive(link.href) ? 'text-purple-950 underline' : 'text-gray-700'
+                        className={`block hover:text-primary transition-colors duration-200 ${
+                          isActive(link.href) ? 'text-primary underline' : 'text-gray-700'
                         }`}
                       >
                         {link.label}

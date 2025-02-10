@@ -1,5 +1,5 @@
-import { allianz, axa, bmw5, Car, electric, mercedesCclass, enterprise, family, longterm, luxury, mercedesAclass, rangerover, suv, tesla, weekend, volvo, blog1, blog2, blog3 } from "@/public/assets";
-import { FaShieldAlt, FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaHandsHelping, FaRocket } from 'react-icons/fa';
+import { allianz, axa, bmw5, electric, mercedesCclass, enterprise, family, longterm, luxury, mercedesAclass, rangerover, suv, tesla, weekend, volvo, blog1, blog2, blog3, blackrock, closebrothers, rac } from "@/public/assets";
+import { FaShieldAlt, FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaHandsHelping, FaRocket, FaUserPlus, FaGasPump, FaShip, FaSnowflake, FaMapMarkedAlt, FaBabyCarriage, FaCarBattery } from 'react-icons/fa';
 import { GiProgression } from "react-icons/gi";
 
 
@@ -11,8 +11,6 @@ export const carsData = [
     features: ['Automatic', '4 Seats', 'Luxury Interior', 'GPS', 'Chauffeur Service Available'],
     type: 'Sedan',
     fuelType: 'Petrol',
-    mileage: '15,000 miles',
-    year: 2023,
     transmission: 'Automatic',
     availability: [],
     price: 120,
@@ -25,8 +23,6 @@ export const carsData = [
     features: ['Automatic', '4 Seats', 'Luxury Interior', 'GPS', 'Heated Seats'],
     type: 'Sedan',
     fuelType: 'Petrol',
-    mileage: '10,000 miles',
-    year: 2020,
     transmission: 'Automatic',
     availability: [],
     price: 120,
@@ -39,8 +35,6 @@ export const carsData = [
     features: ['Automatic', '5 Seats', 'Premium Interior', 'GPS', 'Apple CarPlay'],
     type: 'Sedan',
     fuelType: 'Petrol',
-    mileage: '8,000 miles',
-    year: 2023,
     transmission: 'Automatic',
     availability: [],
     price: 120,
@@ -53,8 +47,6 @@ export const carsData = [
     features: ['Automatic', '5 Seats', 'Electric', 'GPS', 'Autopilot'],
     type: 'Sedan',
     fuelType: 'Electric',
-    mileage: '5,000 miles',
-    year: 2023,
     transmission: 'Automatic',
     availability: [],
     price: 120,
@@ -67,8 +59,6 @@ export const carsData = [
     features: ['Automatic', '5 Seats', 'SUV', 'GPS', 'All-Wheel Drive'],
     type: 'SUV',
     fuelType: 'Diesel',
-    mileage: '20,000 miles',
-    year: 2021,
     transmission: 'Automatic',
     availability: [],
     price: 120,
@@ -81,8 +71,6 @@ export const carsData = [
     features: ['Automatic', '7 Seats', 'SUV', 'GPS', 'All-Wheel Drive'],
     type: 'SUV',
     fuelType: 'Diesel',
-    mileage: '20,000 miles',
-    year: 2021,
     transmission: 'Automatic',
     availability: [],
     price: 120,
@@ -107,7 +95,7 @@ export const carsData = [
       image: weekend,
       title: 'Weekend Special',
       description: 'Get 20% off on all weekend rentals. Limited time only!',
-      ctaText: 'Book Now',
+      ctaText: 'Reserve Now',
       ctaLink: '#',
     },
     {
@@ -115,7 +103,7 @@ export const carsData = [
       image: longterm,
       title: 'Long-Term Rental',
       description: 'Rent for a month and get 30% off. Perfect for long trips!',
-      ctaText: 'Book Now',
+      ctaText: 'Reserve Now',
       ctaLink: '#',
     },
     {
@@ -123,7 +111,7 @@ export const carsData = [
       image: family,
       title: 'Family Package',
       description: 'Special rates for family-sized vehicles. Travel together!',
-      ctaText: 'Book Now',
+      ctaText: 'Reserve Now',
       ctaLink: '#',
     },
   ];
@@ -159,7 +147,7 @@ export const carsData = [
     {
       id: 1,
       quote: "Renting a car was seamless and the service was excellent. Highly recommend!",
-      name: "John Doe",
+      name: "John Mcintyre",
       date: "2023-10-01",
     },
     {
@@ -196,7 +184,7 @@ export const carsData = [
 
   export const quickLinks = [
     { name: 'Home', href: '/' },
-    { name: 'About Us', href: '/about' },
+    { name: 'Privacy Policy', href: 'https://www.termsfeed.com/live/714a7d38-cbd3-42c4-919e-8646ad9f4321' },
     { name: 'Services', href: '/services' },
     { name: 'Contact', href: '/contact' },
   ];
@@ -249,7 +237,7 @@ export const carsData = [
       {
         id: '1',
         question: 'What documents do I need to rent a car?',
-        answer: 'You need a valid driver’s license, a credit card, and proof of insurance.',
+        answer: 'With Prestige Drive you only need a valid driver’s license.',
       },
       {
         id: '2',
@@ -259,24 +247,25 @@ export const carsData = [
       {
         id: '3',
         question: 'What is the minimum age to rent a car?',
-        answer: 'The minimum age to rent a car is typically 21 years old, but it may vary by location and rental company.',
+        answer: 'The minimum age to rent a car is typically 21 years old.',
       },
       {
         id: '4',
         question: 'Is there a mileage limit on rental cars?',
-        answer: 'Some rental companies have mileage limits, while others offer unlimited mileage. Check the terms and conditions of your rental agreement.',
+        answer: 'We offer different packages with different mileage limits to suit your needs. Please check the details of your rental agreement.',
       },
       {
         id: '5',
         question: 'Can I add an additional driver to my rental?',
-        answer: 'Yes, you can usually add an additional driver for an extra fee. Both drivers must meet the rental company’s requirements.',
+        answer: 'Yes, you can usually add an additional driver for an extra fee.',
       },
     ];
 
     export const partners = [
-      { id: 1, logo: axa},
-      { id: 2, logo: allianz },
-      { id: 3, logo: enterprise},
+      { id: 1, logo: allianz },
+      { id: 2, logo: blackrock },
+      { id: 3, logo: closebrothers },
+      { id: 4, logo: rac },
     ];
 
     export const articles = [
@@ -469,4 +458,85 @@ export const carsData = [
         ],
         conclusion: "By following these tips, first-time renters can enjoy a hassle-free car rental experience. Preparation and knowledge are key to making the most of your rental and ensuring a smooth journey."
       }
+    ];
+
+    export const locations = [
+      {
+        id: 'Brighton Airport',
+        name: 'Brighton City Airport',
+        address: 'ecil Pashley Way, Shoreham-by-Sea BN43 5FF',
+        googleMapsLink: 'https://maps.google.com/?q=Brighton+Airport',
+      },
+      {
+        id: 'Heathrow Airport',
+        name: 'Heathrow Airport',
+        address: 'Nelson Road, Hounslow, Middlesex, TW6 2GW',
+        googleMapsLink: 'https://maps.google.com/?q=Heathrow+Airport',
+      },
+    ];
+
+    export const protectionDetails = [
+      'Loss Damage Waiver',
+      'Windscreen Protection',
+      'Personal Accident Protection',
+      'Roadside Protection',
+    ];
+
+    export const plans = [
+      {
+        id: 1,
+        name: 'No Extra Protection',
+        price: 0,
+        includes: [],
+        description: [
+          'For confident drivers who prefer to take full responsibility.',
+          'No added coverage—just you, the road, and the adventure ahead.',
+        ],
+      },
+      {
+        id: 2,
+        name: 'Basic\nProtection',
+        price: 10,
+        includes: ['Loss Damage Waiver'],
+        description: [
+          'Covers vehicle damage so you can focus on enjoying the ride.',
+          'A simple yet essential safety net for peace of mind.',
+        ],
+      },
+      {
+        id: 3,
+        name: 'Smart\nProtection',
+        price: 20,
+        includes: ['Loss Damage Waiver', 'Windscreen Protection'],
+        description: [
+          'Smart coverage for unexpected windscreen damage.',
+          'A balanced plan to keep small issues from ruining your trip.',
+        ],
+      },
+      {
+        id: 4,
+        name: 'All Inclusive Protection',
+        price: 30,
+        includes: [
+          'Loss Damage Waiver',
+          'Windscreen Protection',
+          'Personal Accident Protection',
+          'Roadside Protection',
+        ],
+        description:[
+        'Complete protection so you can drive worry-free anywhere.',
+        'Covers you, the car, and unexpected issues along the way.',
+        ]
+      },
+    ];
+
+    export const additionalOptions = [
+    { id: 1, name: 'Additional Driver', price: 10, type: 'per day', icon: FaUserPlus, details: 'Allows an extra driver to operate the rental vehicle.' },
+    { id: 2, name: 'Prepaid Fuel', price: 50, type: 'one-time', icon: FaGasPump, details: 'Get a full tank of fuel in advance and return the car empty.' },
+    { id: 3, name: 'Island / Ferryboat Travel', price: 15, type: 'per day', icon: FaShip, details: 'Covers additional insurance for ferry or island travel.' },
+    { id: 4, name: 'Interior Protection', price: 5, type: 'per day', icon: FaShieldAlt, details: 'Covers accidental spills or damage to the car interior.' },
+    { id: 5, name: 'Snow Chains', price: 8, type: 'per day', icon: FaSnowflake, details: 'Essential for driving in snowy or icy conditions.' },
+    { id: 6, name: 'Navigation System', price: 7, type: 'per day', icon: FaMapMarkedAlt, details: 'A GPS system to help navigate during the rental period.' },
+    { id: 7, name: 'Baby Car Seat', price: 12, type: 'per day', icon: FaBabyCarriage, details: 'Ensures child safety during travel.' },
+    { id: 8, name: 'Roof Rack', price: 20, type: 'per day', icon: FaCarBattery, details: 'Additional space for luggage or sports equipment.' },
     ];

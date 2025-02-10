@@ -1,262 +1,228 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { FaSearch, FaPlane, FaCalendar, FaBars } from "react-icons/fa";
-import { carsData } from "@/constants";
-import Card from "./Card";
+import { FaPlane, FaCalendar, FaChevronDown, FaChevronUp, FaMapMarkerAlt } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { StaticImageData } from "next/image";
 import { useRouter } from "next/navigation";
 import Button from "./Button";
-
-interface Car {
-  id: string;
-  image: string | StaticImageData;
-  title: string;
-  price: number;
-  features: string[];
-  type: string;
-  fuelType: string;
-  mileage: string;
-  year: number;
-  transmission: string;
-  href: string;
-}
+import { locations } from '@/constants';
+import { useRentalData } from "@/app/contexts/RentalContext";
 
 const SearchBar = () => {
-  const [pickupLocation, setPickupLocation] = useState("");
-  const [dropoffLocation, setDropoffLocation] = useState("");
-  const [pickupDate, setPickupDate] = useState<Date | null>(null);
-  const [dropoffDate, setDropoffDate] = useState<Date | null>(null);
-  const [pickupTime, setPickupTime] = useState("12:30");
-  const [dropoffTime, setDropoffTime] = useState("08:30");
-  const [showFilters, setShowFilters] = useState(false);
-  const [carType, setCarType] = useState("");
-  const [priceRange, setPriceRange] = useState("");
-  const [transmission, setTransmission] = useState("");
-  const [searchResults, setSearchResults] = useState<Car[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [hasSearched, setHasSearched] = useState(false);
+  const { rentalData, setRentalData } = useRentalData();
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
   const [showDropoffInput, setShowDropoffInput] = useState(false);
-  const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
+  const [isExpanded, setIsExpanded] = useState<boolean>(
+    typeof window !== "undefined" && window.innerWidth >= 768
+  );
+
   const router = useRouter();
 
-  useEffect(() => {
-    let lastScrollY = window.scrollY;
-
-    const handleScroll = () => {
-      if (window.scrollY > lastScrollY && window.scrollY > 100) {
-        setIsNavbarVisible(false); // Hide navbar on scroll down
-      } else {
-        setIsNavbarVisible(true); // Show navbar on scroll up
-      }
-      lastScrollY = window.scrollY;
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   const handleShowCars = () => {
-    router.push("/cars");
-  };
+    // If dropoffLocation is empty, set it to pickupLocation
+    const finalDropoffLocation = rentalData.dropoffLocation || rentalData.pickupLocation;
 
-  const toggleSearchBar = () => {
-    setIsSearchBarVisible(!isSearchBarVisible);
+    // Update rental data in context
+    const updatedData = {
+      ...rentalData,
+      dropoffLocation: finalDropoffLocation,
+    };
+    setRentalData(updatedData);
+  
+    // Convert dates to ISO strings
+    const pickupDateISO = updatedData.pickupDate ? new Date(updatedData.pickupDate).toISOString() : "";
+    const dropoffDateISO = updatedData.dropoffDate ? new Date(updatedData.dropoffDate).toISOString() : "";
+  
+    // Encode rental data as query parameters
+    const queryParams = new URLSearchParams({
+      pickupLocation: updatedData.pickupLocation,
+      dropoffLocation: updatedData.dropoffLocation,
+      pickupDate: pickupDateISO,
+      dropoffDate: dropoffDateISO,
+      pickupTime: updatedData.pickupTime,
+      dropoffTime: updatedData.dropoffTime,
+    });
+  
+
+    console.log("Updated Rental Data:", updatedData); // Debugging
+
+    // Navigate to the cars page
+    router.push(`/cars?${queryParams.toString()}`);
   };
 
   return (
-    <div className={`fixed top-0 left-0 right-0 border-p z-40 bg-white p-6 container rounded-lg shadow-lg transition-transform duration-300 ${
-      isNavbarVisible ? 'translate-y-20' : 'translate-y-0'
-    }`}>
-      {/* Toggle Button for Smaller Screens */}
+    <div
+      className={`fixed top-0 left-0 right-0 z-40 bg-white p-6 container rounded-lg shadow-lg transition-all duration-300 ${
+        isNavbarVisible ? "translate-y-28" : "translate-y-4"
+      }`}
+    >
+      {/* Toggle Button (Dropdown Arrow) */}
       <button
-        className="md:hidden absolute top-2 right-4 p-2 bg-gray-200 rounded-lg"
-        onClick={toggleSearchBar}
+        className="absolute top-2 right-4 p-2 bg-gray-200 rounded-lg"
+        onClick={() => setIsExpanded((prev) => !prev)}
       >
-        <FaBars className="text-gray-700" />
+        {isExpanded ? <FaChevronUp className="text-primary" /> : <FaChevronDown className="text-primary" />}
       </button>
 
-      {/* Search Form */}
-      <div className={`flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4 ${
-        isSearchBarVisible ? 'block' : 'hidden md:flex'
-      }`}>
-        {/* Pickup Location */}
-        <div className="flex-1">
-          <label className="block text-sm font-medium text-gray-700">
-            Pickup Location
-          </label>
-          <div className="relative mt-1">
-            <select
-              className="w-full p-2 border rounded-md pl-10"
-              value={pickupLocation}
-              onChange={(e) => setPickupLocation(e.target.value)}
-            >
-              <option value="" disabled>
-                Choose pickup location
-              </option>
-              <option value="brighton-airport">Brighton Airport</option>
-              <option value="heathrow-airport">Heathrow Airport</option>
-            </select>
-            <FaPlane className="absolute left-3 top-3 text-gray-500" />
-          </div>
-        </div>
-
-        {/* Dropoff Location */}
-        <div className="flex-1">
-          <label className="block text-sm font-medium text-gray-700">
-            Dropoff Location
-          </label>
-          <div className="relative mt-1">
-            {showDropoffInput ? (
-              <select
-                className="w-full p-2 border rounded-md pl-10"
-                value={dropoffLocation}
-                onChange={(e) => setDropoffLocation(e.target.value)}
-              >
-                <option value="" disabled>
-                  Choose dropoff location
-                </option>
-                <option value="brighton-airport">Brighton Airport</option>
-                <option value="heathrow-airport">Heathrow Airport</option>
-              </select>
-            ) : (
-              <p
-                className="text-sm text-gray-500 cursor-pointer"
-                onClick={() => setShowDropoffInput(true)}
-              >
-                Different than pickup location?
-              </p>
-            )}
-            {showDropoffInput && <FaPlane className="absolute left-3 top-3 text-gray-500" />}
-          </div>
-        </div>
-
-        {/* Pickup Date and Time */}
-        <div className="flex-1">
-          <label className="block text-sm font-medium text-gray-700">
-            Pickup Date
-          </label>
-          <div className="flex space-x-2">
-            <div className="relative flex-1">
-              <DatePicker
-                selected={pickupDate}
-                onChange={(date) => setPickupDate(date)}
-                className="w-full p-2 border rounded-md pl-10"
-                dateFormat="dd/MM/yyyy"
-                placeholderText="Pickup date"
-              />
-              <FaCalendar className="absolute left-3 top-3 text-gray-500" />
+      {/* Collapsible Search Form */}
+      <div
+        className={`transition-all duration-300 ${
+          isExpanded ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
+        <div className="flex flex-col space-y-4">
+          {/* Pickup Location */}
+          <div className="flex flex-col md:flex-row w-full space-y-4 md:space-y-0 md:space-x-4">
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-gray-700">Pickup Location</label>
+              <div className="relative mt-1">
+                <select
+                  className="w-full p-2 border rounded-md pl-10"
+                  value={rentalData.pickupLocation}
+                  onChange={(e) => {
+                    setRentalData({ ...rentalData, pickupLocation: e.target.value });
+                    console.log("Pickup Location Updated:", e.target.value); // Debugging
+                  }}
+                >
+                  <option value="" disabled>Choose pickup location</option>
+                  {locations.map((location) => (
+                    <option key={location.id} value={location.id}>
+                      {location.name} - {location.address}
+                    </option>
+                  ))}
+                </select>
+                <FaPlane className="absolute left-3 top-3 text-gray-500" />
+                {rentalData.pickupLocation && (
+                  <a
+                    href={locations.find((loc) => loc.id === rentalData.pickupLocation)?.googleMapsLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="absolute right-5 top-3 text-gray-500 hover:text-primary"
+                  >
+                    <FaMapMarkerAlt />
+                  </a>
+                )}
+              </div>
             </div>
-            {pickupDate && (
-              <input
-                type="time"
-                className="w-1/3 p-2 border rounded-md"
-                value={pickupTime}
-                onChange={(e) => setPickupTime(e.target.value)}
-              />
-            )}
-          </div>
-        </div>
 
-        {/* Dropoff Date and Time */}
-        <div className="flex-1">
-          <label className="block text-sm font-medium text-gray-700">
-            Dropoff Date
-          </label>
-          <div className="flex space-x-2">
-            <div className="relative flex-1">
-              <DatePicker
-                selected={dropoffDate}
-                onChange={(date) => setDropoffDate(date)}
-                className="w-full p-2 border rounded-md pl-10"
-                dateFormat="dd/MM/yyyy"
-                placeholderText="Dropoff date"
-                minDate={pickupDate || undefined}
-              />
-              <FaCalendar className="absolute left-3 top-3 text-gray-500" />
+            {/* Pickup Date */}
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-gray-700">Pickup Date</label>
+              <div className="flex space-x-2">
+                <div className="relative flex-1">
+                  <DatePicker
+                    selected={rentalData.pickupDate ? new Date(rentalData.pickupDate) : null}
+                    onChange={(date) => {
+                      setRentalData({ ...rentalData, pickupDate: date ? date.toISOString() : null });
+                      console.log("Pickup Date Updated:", date); // Debugging
+                    }}
+                    className="w-full p-2 border rounded-md pl-10"
+                    dateFormat="dd/MM/yyyy"
+                    placeholderText="Pickup date"
+                  />
+                  <FaCalendar className="absolute left-3 top-3 text-gray-500" />
+                </div>
+                {rentalData.pickupDate && (
+                  <input
+                    type="time"
+                    className="w-1/3 p-2 border rounded-md"
+                    value={rentalData.pickupTime}
+                    onChange={(e) => {
+                      setRentalData({ ...rentalData, pickupTime: e.target.value });
+                      console.log("Pickup Time Updated:", e.target.value); // Debugging
+                    }}
+                  />
+                )}
+              </div>
             </div>
-            {dropoffDate && (
-              <input
-                type="time"
-                className="w-1/3 p-2 border rounded-md"
-                value={dropoffTime}
-                onChange={(e) => setDropoffTime(e.target.value)}
-              />
-            )}
           </div>
-        </div>
 
-        {/* Show Cars Button */}
-        <div className="flex space-x-4">
-          <Button
-            href="/cars"
-          >
-            Show Cars
-          </Button>
+          {/* Dropoff Data */}
+          <div className="flex flex-col md:flex-row w-full space-y-4 md:space-y-0 md:space-x-4">
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-gray-700">Dropoff Location</label>
+              <div className="relative mt-1">
+                {showDropoffInput ? (
+                  <select
+                    className="w-full p-2 border rounded-md pl-10"
+                    value={rentalData.dropoffLocation}
+                    onChange={(e) => {
+                      setRentalData({ ...rentalData, dropoffLocation: e.target.value });
+                      console.log("Dropoff Location Updated:", e.target.value); // Debugging
+                    }}
+                  >
+                    <option value="" disabled>Choose dropoff location</option>
+                    {locations.map((location) => (
+                      <option key={location.id} value={location.id}>
+                        {location.name} - {location.address}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <p
+                    className="text-sm text-gray-500 cursor-pointer"
+                    onClick={() => setShowDropoffInput(true)}
+                  >
+                    Different than pickup location?
+                  </p>
+                )}
+                {showDropoffInput && (
+                  <>
+                    <FaPlane className="absolute left-3 top-3 text-gray-500" />
+                    {rentalData.dropoffLocation && (
+                      <a
+                        href={locations.find((loc) => loc.id === rentalData.dropoffLocation)?.googleMapsLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="absolute right-5 top-3 text-gray-500 hover:text-primary"
+                      >
+                        <FaMapMarkerAlt />
+                      </a>
+                    )}
+                  </>
+                )}
+              </div>
+            </div>
+
+            {/* Dropoff Date */}
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-gray-700">Dropoff Date</label>
+              <div className="flex space-x-2">
+                <div className="relative flex-1">
+                  <DatePicker
+                    selected={rentalData.dropoffDate ? new Date(rentalData.dropoffDate) : null}
+                    onChange={(date) => {
+                      setRentalData({ ...rentalData, dropoffDate: date ? date.toISOString() : null });
+                      console.log("Dropoff Date Updated:", date); // Debugging
+                    }}
+                    className="w-full p-2 border rounded-md pl-10"
+                    dateFormat="dd/MM/yyyy"
+                    placeholderText="Dropoff date"
+                    minDate={rentalData.pickupDate ? new Date(rentalData.pickupDate) : undefined}
+                  />
+                  <FaCalendar className="absolute left-3 top-3 text-gray-500" />
+                </div>
+                {rentalData.dropoffDate && (
+                  <input
+                    type="time"
+                    className="w-1/3 p-2 border rounded-md"
+                    value={rentalData.dropoffTime}
+                    onChange={(e) => {
+                      setRentalData({ ...rentalData, dropoffTime: e.target.value });
+                      console.log("Dropoff Time Updated:", e.target.value); // Debugging
+                    }}
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Show Cars Button */}
+          <div className="flex justify-center items-center w-full">
+            <Button onClick={handleShowCars} className="w-[100%]">Show Cars</Button>
+          </div>
         </div>
       </div>
-
-      {/* Filters Section */}
-      {showFilters && (
-        <div className="mt-4 bg-gray-100 p-4 rounded-md">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* Car Type Filter */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Car Type
-              </label>
-              <select
-                className="mt-1 w-full p-2 border rounded-md"
-                value={carType}
-                onChange={(e) => setCarType(e.target.value)}
-              >
-                <option value="">All Types</option>
-                <option value="SUV">SUV</option>
-                <option value="Sedan">Sedan</option>
-                <option value="Hatchback">Hatchback</option>
-                <option value="Electric">Electric</option>
-              </select>
-            </div>
-
-            {/* Price Range Filter */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Price Range
-              </label>
-              <select
-                className="mt-1 w-full p-2 border rounded-md"
-                value={priceRange}
-                onChange={(e) => setPriceRange(e.target.value)}
-              >
-                <option value="">Any</option>
-                <option value="80">Up to £80</option>
-                <option value="100">Up to £100</option>
-                <option value="120">Up to £120</option>
-                <option value="150">Up to £150</option>
-              </select>
-            </div>
-
-            {/* Transmission Filter */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Transmission
-              </label>
-              <select
-                className="mt-1 w-full p-2 border rounded-md"
-                value={transmission}
-                onChange={(e) => setTransmission(e.target.value)}
-              >
-                <option value="">Any</option>
-                <option value="Automatic">Automatic</option>
-                <option value="Manual">Manual</option>
-              </select>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

@@ -34,7 +34,7 @@ const FeaturedDeals = () => {
               className="w-full h-48 object-cover"
             />
             <div className="p-4">
-              <h3 className="text-xl font-bold text-secondary mb-2">
+              <h3 className="text-xl font-extrabold text-bg-primary mb-2">
                 {deal.title}
               </h3>
               <p className="text-sm text-gray-800 mb-4">{deal.description}</p>

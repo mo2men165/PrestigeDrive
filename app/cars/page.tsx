@@ -3,8 +3,12 @@
 import React, { useState } from 'react';
 import Card from '@/components/Card';
 import { carsData } from '@/constants';
+import { useSearchParams } from "next/navigation";
+
 
 export default function CarsPage() {
+  const searchParams = useSearchParams();
+
   const [filters, setFilters] = useState({
     priceRange: [0, 200],
     transmission: 'All',
@@ -24,16 +28,14 @@ export default function CarsPage() {
     .filter((car) => (filters.feature ? car.features.includes(filters.feature) : true))
     .filter((car) => (filters.type === 'All' ? true : car.type === filters.type))
     .filter((car) => (filters.fuelType === 'All' ? true : car.fuelType === filters.fuelType))
-    .filter((car) => (filters.year === 'All' ? true : car.year.toString() === filters.year))
 
   // Extract unique values for type, fuelType, and year for dropdown options
   const uniqueTypes = [...new Set(carsData.map((car) => car.type))];
   const uniqueFuelTypes = [...new Set(carsData.map((car) => car.fuelType))];
-  const uniqueYears = [...new Set(carsData.map((car) => car.year.toString()))].sort((a:any, b:any) => b - a);
 
   return (
     <section className="container mx-auto py-12 my-10">
-       <div className="bg-gradient-to-r from-purple-950 to-purple-700 rounded-lg p-8 text-white mb-12">
+       <div className="bg-gradient-to-r from-[#0E253F] to-[#1B365D] rounded-lg p-8 text-white mb-12">
         <h2 className="text-4xl font-bold mb-4">Our Fleet</h2>
         <p className="text-lg leading-8">
           If it's luxury vehicles, SUVs or electric vehicles that you're looking for, we got it all right here.
@@ -54,21 +56,6 @@ export default function CarsPage() {
               <option value="All">All</option>
               <option value="Automatic">Automatic</option>
               <option value="Manual">Manual</option>
-            </select>
-          </div>
-
-          {/* Feature */}
-          <div>
-            <label className="block text-sm font-medium mb-2">Feature</label>
-            <select
-              value={filters.feature}
-              onChange={(e) => handleFilterChange('feature', e.target.value)}
-              className="w-full p-2 border rounded-lg"
-            >
-              <option value="">All</option>
-              <option value="Chauffeur Service Available">Chauffeur Service</option>
-              <option value="GPS">GPS</option>
-              <option value="Luxury Interior">Luxury Interior</option>
             </select>
           </div>
 
@@ -106,38 +93,7 @@ export default function CarsPage() {
             </select>
           </div>
 
-          {/* Year */}
-          <div>
-            <label className="block text-sm font-medium mb-2">Year</label>
-            <select
-              value={filters.year}
-              onChange={(e) => handleFilterChange('year', e.target.value)}
-              className="w-full p-2 border rounded-lg"
-            >
-              <option value="All">All</option>
-              {uniqueYears.map((year) => (
-                <option key={year} value={year}>
-                  {year}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Sort By */}
-          <div>
-            <label className="block text-sm font-medium mb-2">Sort By</label>
-            <select
-              value={filters.sortBy}
-              onChange={(e) => handleFilterChange('sortBy', e.target.value)}
-              className="w-full p-2 border rounded-lg"
-            >
-              <option value="">None</option>
-              <option value="priceLowToHigh">Price: Low to High</option>
-              <option value="priceHighToLow">Price: High to Low</option>
-              <option value="nameAZ">Name: A-Z</option>
-              <option value="nameZA">Name: Z-A</option>
-            </select>
-          </div>
+          
         </div>
       </div>
 
@@ -152,8 +108,6 @@ export default function CarsPage() {
               features={car.features}
               type={car.type}
               fuelType={car.fuelType}
-              mileage={car.mileage}
-              year={car.year}
               transmission={car.transmission}
               href={car.href}
               id={car.id}
