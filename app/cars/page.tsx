@@ -1,13 +1,10 @@
 'use client';
-
 import React, { useState } from 'react';
 import Card from '@/components/Card';
 import { carsData } from '@/constants';
-import { useSearchParams } from "next/navigation";
 
 
 export default function CarsPage() {
-  const searchParams = useSearchParams();
 
   const [filters, setFilters] = useState({
     priceRange: [0, 200],
