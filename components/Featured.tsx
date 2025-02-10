@@ -19,8 +19,6 @@ const Featured = () => {
             features={car.features}
             type={car.type}
             fuelType={car.fuelType}
-            mileage={car.mileage}
-            year={car.year}
             transmission={car.transmission}
             href={car.href}
             id={car.id} 

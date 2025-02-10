@@ -10,7 +10,6 @@ interface CardProps {
   features: string[];
   type: string;
   fuelType: string;
-
   transmission: string;
   href: string;
   id: string;
