@@ -101,7 +101,7 @@ const handleReserveNow = async () => {
         timer -= 1;
         if (timer === 0) {
           clearInterval(interval);
-          // router.push('/');
+          router.push('/');
         }
       }, 1000);
     } catch (error) {
