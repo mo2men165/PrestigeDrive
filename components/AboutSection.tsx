@@ -24,13 +24,13 @@ const AboutSection = () => {
         <h1 className="text-4xl font-bold mb-4">About Us</h1>
       </div>  
           <p className="text-lg my-6 text-gray-800">
-            At <strong>Prestige Drive</strong>, we are passionate about bringing luxury within reach. Based in London and serving the UK and Ireland, we specialise in providing premium car rentals at economical prices, ensuring that everyone can experience the thrill of driving a high-end vehicle.
+            At <strong>MyEasyDrive</strong>, we are passionate about bringing luxury within reach. Based in London and serving the UK and Ireland, we specialise in providing premium car rentals at economical prices, ensuring that everyone can experience the thrill of driving a high-end vehicle.
           </p>
           <p className="text-lg my-6 text-gray-800">
             Whether you're looking for a sleek sedan, a powerful SUV, or an eco-friendly electric car, our diverse fleet has the perfect match for every occasion. What sets us apart is our <strong>unique chauffeur service</strong>, where you can request a professional chauffeur to accompany you during your rental period, offering a seamless and luxurious travel experience.
           </p>
           <p className="text-lg my-6 text-gray-800">
-            Our mission is simple: to make luxury car rentals <strong>accessible, affordable, and stress-free</strong>. With competitive pricing, exceptional customer service, and a commitment to excellence, we ensure that every journey with Prestige Drive is as memorable as your destination.
+            Our mission is simple: to make luxury car rentals <strong>accessible, affordable, and stress-free</strong>. With competitive pricing, exceptional customer service, and a commitment to excellence, we ensure that every journey with MyEasyDrive is as memorable as your destination.
           </p>
           <Button variant="primary" href="/services">
             Learn More

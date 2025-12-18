@@ -6,9 +6,11 @@ import * as Yup from 'yup';
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import { FaMapMarkerAlt } from 'react-icons/fa';
-import { Suspense, useState } from 'react';
-import { locations } from '@/constants';
+import { Suspense, useEffect, useState } from 'react';
 import emailjs from 'emailjs-com';
+import GlobalLoader from '@/components/GlobalLoader';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 
 const serviceTypes = [
@@ -40,6 +42,23 @@ export default function BookingForm() {
   const defaultServiceType = searchParams.get('service') || '';
   const [isLoading, setIsLoading] = useState(false);
   const [confirmationMessage, setConfirmationMessage] = useState('');
+  const [locations, setLocations] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const locationsSnapshot = await getDocs(collection(db, 'locations'));
+        const locationsData = locationsSnapshot.docs
+            .map(doc => ({ id: doc.id, ...doc.data() }));
+            setLocations(locationsData);
+  
+      } catch (error) {
+        console.error('Error fetching Firestore data:', error);
+      }
+    };
+  
+    fetchData();
+  }, []);
 
   const handleSubmit = async (values: any) => {
     setIsLoading(true);
@@ -60,25 +79,25 @@ export default function BookingForm() {
     try {
       // Send email to customer
       await emailjs.send(
-        'service_lajllhr',
-        'template_1fgx54n',
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID_USER!,
         emailParams,
-        'JNKdBh4-SqH_asdv7' // Replace with your actual EmailJS public key
+        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
       );
-
+      
       // Send email to owner
       await emailjs.send(
-        'service_lajllhr',
-        'template_e5rw3mj',
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID_OWNER!,
         emailParams,
-        'JNKdBh4-SqH_asdv7'
+        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
       );
 
       // Simulate form submission
       setTimeout(() => {
         setIsLoading(false);
         setConfirmationMessage(
-          `Hi ${values.name}, thanks for booking with Prestige Drive! We have received your booking for ${serviceName}. Your pickup will be from ${values.pickupLocation} on ${values.pickupDate} at ${values.pickupTime}, and your dropoff will be at ${values.dropoffLocation} on ${values.dropoffDate} at ${values.dropoffTime}. You will receive a confirmation email of your request and one of our team members will call you to confirm the booking.`
+          `Hi ${values.name}, thanks for booking with MyEasyDrive! We have received your booking for ${serviceName}. Your pickup will be from ${values.pickupLocation} on ${values.pickupDate} at ${values.pickupTime}, and your dropoff will be at ${values.dropoffLocation} on ${values.dropoffDate} at ${values.dropoffTime}. You will receive a confirmation email of your request and one of our team members will call you to confirm the booking.`
         );
 
         console.log('Email Params:', emailParams);
@@ -94,7 +113,7 @@ const service = serviceTypes.find((service) => service.id === defaultServiceType
 const serviceName = service ? service.name : 'Unknown Service';
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<GlobalLoader />}>
       <section className="container mx-auto py-12 my-16">
       {confirmationMessage && (
         <div className="bg-green-600 text-white p-4 rounded-md mb-8">

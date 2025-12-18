@@ -74,13 +74,13 @@ const Navbar = () => {
           {/* Brand Name */}
           <Image
           src={logo}
-          alt='Prestige Drive'
+          alt='MyEasyDrive'
           width={200}
-          height={200} 
+          height={200}
+          onClick={homeNavigate}
+          className='cursor-pointer'
           />
-          {/* <h1 className="text-2xl font-extrabold text-primary font-serif cursor-pointer" onClick={homeNavigate}>
-            Prestige Drive
-          </h1> */}
+
         </div>
       </nav>
 

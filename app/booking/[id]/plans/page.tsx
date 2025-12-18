@@ -1,28 +1,64 @@
 'use client';
 
 import { useParams, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaChevronLeft, FaCheck, FaTimes } from 'react-icons/fa';
 import Modal from 'react-modal';
-import { plans, protectionDetails } from '../../../../constants';
-import { useRentalData } from '@/app/contexts/RentalContext';
+import { useRentalData } from '@/contexts/RentalContext';
+import { db } from '@/lib/firebase';
+import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
+import GlobalLoader from '@/components/GlobalLoader';
+import { log } from 'console';
+
 
 export default function PlansPage() {
   const { rentalData, setRentalData } = useRentalData();
   const { id } = useParams();
   const router = useRouter();
 
+  const [plans, setPlans] = useState<any[]>([]);
+  const [protectionDetails, setProtectionDetails] = useState<string[]>([]);
   const [selectedPlan, setSelectedPlan] = useState<number | null>(null);
   const [isBreakdownModalOpen, setIsBreakdownModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  Modal.setAppElement('#root');
+  
 
-  if (!rentalData) {
-    return <div className="text-center py-20 text-lg font-semibold">Loading rental details...</div>;
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch plans
+        const plansSnapshot = await getDocs(collection(db, 'plans'));
+        const plansData = plansSnapshot.docs
+            .map(doc => ({ id: doc.id, ...doc.data() }))
+            .sort((a: any, b: any) => a.price - b.price);
+            setPlans(plansData);
+
+        const protectionDocRef = doc(db, 'protection-details', 'default');
+        const protectionDocSnap = await getDoc(protectionDocRef);
+
+        if (protectionDocSnap.exists()) {
+          console.log(protectionDocSnap.data());
+          setProtectionDetails(protectionDocSnap.data().default);
+        }
+
+      } catch (error) {
+        console.error('Error fetching Firestore data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+
+  if (!rentalData || loading) {
+    return <GlobalLoader />;
   }
 
   // Extract rental details
-  const { pickupDate, dropoffDate, basePrice, totalPrice, discountAmount, pickupTime, dropoffTime, vat, hasDiscount, valueBeforeDiscount, totalDays, carMake, name, email, phone, dob } = rentalData;
-
-  console.log(rentalData);
+  const { pickupDate, dropoffDate, basePrice, totalPrice, discountAmount, pickupTime, dropoffTime, vat, hasDiscount, valueBeforeDiscount, totalDays } = rentalData;
 
   // Calculate the total price including the selected plan
   const selectedPlanDetails = selectedPlan !== null ? plans.find((plan) => plan.id === selectedPlan) : null;
@@ -31,21 +67,10 @@ export default function PlansPage() {
 
   const handleContinue = () => {
     if (selectedPlan !== null) {
-      // Update rental data in context with the selected plan
-      setRentalData({
-        ...rentalData,
-        selectedPlan: selectedPlanDetails,
-        totalPrice: updatedTotalPrice,
-        carMake: carMake,
-        name: name,
-        email: email,
-        phone: phone,
-        dob: dob
-      });
+      setRentalData({ ...rentalData, selectedPlan: selectedPlanDetails, totalPrice: updatedTotalPrice });
       router.push(`/booking/${id}/additionalOptions`);
     }
   };
-
   return (
     <section className="container mx-auto py-12 my-16">
       {/* Header */}

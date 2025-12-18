@@ -5,16 +5,39 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useRouter } from "next/navigation";
 import Button from "./Button";
-import { locations } from '@/constants';
-import { useRentalData } from "@/app/contexts/RentalContext";
+import { useRentalData } from "@/contexts/RentalContext";
+import { db } from "@/lib/firebase";
+import { collection, getDocs } from "firebase/firestore";
 
 const SearchBar = () => {
   const { rentalData, setRentalData } = useRentalData();
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
   const [showDropoffInput, setShowDropoffInput] = useState(false);
-  const [isExpanded, setIsExpanded] = useState<boolean>(
-    typeof window !== "undefined" && window.innerWidth >= 768
-  );
+  const [isExpanded, setIsExpanded] = useState<boolean>();
+  const [locations, setLocations] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsExpanded(window.innerWidth >= 768);
+    }
+  }, []);
+  
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const locationsSnapshot = await getDocs(collection(db, 'locations'));
+        const locationsData = locationsSnapshot.docs
+            .map(doc => ({ id: doc.id, ...doc.data() }));
+            setLocations(locationsData);
+  
+      } catch (error) {
+        console.error('Error fetching Firestore data:', error);
+      }
+    };
+  
+    fetchData();
+  }, []);
 
   const router = useRouter();
 

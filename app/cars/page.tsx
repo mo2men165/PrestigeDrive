@@ -1,42 +1,61 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Card from '@/components/Card';
-import { carsData } from '@/constants';
+import { collection, getDocs, query } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import { Car } from '@/types/types';
+import { useRentalData } from '@/contexts/RentalContext';
 
 export default function CarsPage() {
-
+  const [cars, setCars] = useState<Car[]>([]); 
   const [filters, setFilters] = useState({
-    priceRange: [0, 200],
     transmission: 'All',
-    feature: '',
     type: 'All',
     fuelType: 'All',
-    year: 'All',
-    sortBy: '',
   });
+
+  const { isLoading, setLoading } = useRentalData();
+
+  useEffect(() => {
+    const fetchCars = async () => {
+      try {
+        const q = query(collection(db, 'cars'));
+        const querySnapshot = await getDocs(q);
+        const carsList = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Car[];
+  
+        setCars(carsList);
+      } catch (error) {
+        console.error("Error fetching cars:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    fetchCars();
+  }, []);
+  
 
   const handleFilterChange = (key: string, value: any) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
-  const filteredCars = carsData
+  const filteredCars = cars
     .filter((car) => (filters.transmission === 'All' ? true : car.transmission === filters.transmission))
-    .filter((car) => (filters.feature ? car.features.includes(filters.feature) : true))
     .filter((car) => (filters.type === 'All' ? true : car.type === filters.type))
-    .filter((car) => (filters.fuelType === 'All' ? true : car.fuelType === filters.fuelType))
+    .filter((car) => (filters.fuelType === 'All' ? true : car.fuelType === filters.fuelType));
 
-  // Extract unique values for type, fuelType, and year for dropdown options
-  const uniqueTypes = [...new Set(carsData.map((car) => car.type))];
-  const uniqueFuelTypes = [...new Set(carsData.map((car) => car.fuelType))];
+  const uniqueTypes = [...new Set(cars.map((car) => car.type))];
+  const uniqueFuelTypes = [...new Set(cars.map((car) => car.fuelType))];
 
   return (
     <section className="container mx-auto py-12 my-16">
-       <div className="bg-gradient-to-r from-[#0E253F] to-[#1B365D] rounded-lg p-8 text-white mb-12">
+      <div className="bg-gradient-to-r from-[#0E253F] to-[#1B365D] rounded-lg p-8 text-white mb-12">
         <h2 className="text-4xl font-bold mb-4">Our Fleet</h2>
         <p className="text-lg leading-8">
           If it's luxury vehicles, SUVs or electric vehicles that you're looking for, we got it all right here.
         </p>
-      </div>      
+      </div>
+      
       {/* Filters */}
       <div className="mb-8 p-4 bg-neutral rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold mb-4">Filters</h2>
@@ -88,8 +107,6 @@ export default function CarsPage() {
               ))}
             </select>
           </div>
-
-          
         </div>
       </div>
 
@@ -105,7 +122,6 @@ export default function CarsPage() {
               type={car.type}
               fuelType={car.fuelType}
               transmission={car.transmission}
-              href={car.href}
               id={car.id}
             />
           ))

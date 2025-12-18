@@ -2,13 +2,14 @@
 import './globals.css';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { RentalProvider } from './contexts/RentalContext';
 import PrivacyPolicyBar from '@/components/PrivacyPolicyBar';
 import ChatButton from '@/components/ChatButton';
 import { Suspense } from 'react';
+import { RentalProvider } from './../contexts/RentalContext';
+import GlobalLoader from '@/components/GlobalLoader';
 
 export const metadata = {
-  title: 'Prestige Drive',
+  title: 'MyEasyDrive',
   description: 'Your one stop shop for luxury car rentals and chauffeur services.',
   icons: {
     icon: "/favicon.png", // Default favicon
@@ -29,15 +30,15 @@ export default function RootLayout({
       </head>
 
       <body id='root' className="flex flex-col min-h-screen">
-        <Suspense fallback={<div>Loading...</div>}>
-        <RentalProvider>
+      <RentalProvider>
+        <Suspense fallback={<GlobalLoader />}>
           <Navbar />
           <main className="flex-grow">{children}</main>
           <ChatButton />
           <PrivacyPolicyBar />
           <Footer />
-        </RentalProvider>
         </Suspense>
+        </RentalProvider>
       </body>
     </html>
   );

@@ -15,7 +15,7 @@ const Partners = () => {
       <h2 className="text-4xl font-sans font-bold text-center uppercase mb-6">
         Our Partners
       </h2>
-      <div className="flex justify-center gap-24 flex-wrap">
+      <div className="flex justify-center md:gap-24 flex-col md:flex-row gap-10 items-center flex-wrap">
         {partners.map((partner, index) => (
           <motion.div 
           key={partner.id} 
@@ -29,9 +29,9 @@ const Partners = () => {
             <Image
               src={partner.logo}
               alt={`Partner ${partner.id}`}
-              width={250} // Set a base width
-              height={150} // Set a base height
-              className="object-contain w-full h-full" // Maintain aspect ratio
+              width={partner.width}
+              height={partner.height} 
+              className= {` object-contain h-full ${partner.size === "small" ? "w-[75%]" : "w-full"} `}
             />
           </motion.div>
         ))}

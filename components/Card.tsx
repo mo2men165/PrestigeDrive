@@ -5,14 +5,13 @@ import Button from './Button';
 import Image, { StaticImageData } from 'next/image';
 import { useSearchParams } from 'next/navigation';
 
-interface CardProps {
+export interface CardProps {
   image: string | StaticImageData;
   title: string;
   features: string[];
   type: string;
   fuelType: string;
   transmission: string;
-  href: string;
   id: string;
   price?: number;
 }
@@ -32,7 +31,6 @@ function CardContent({
   type,
   fuelType,
   transmission,
-  href,
   id,
 }: CardProps) {
   const searchParams = useSearchParams();

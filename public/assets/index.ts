@@ -1,4 +1,4 @@
-import logo from '../../public/assets/logo.png';
+import logo from '../../public/assets/myeasydrive-high-resolution-logo-transparent.png';
 import family from '../../public/assets/familyy.jpg';
 import weekend from '../../public/assets/weekend.jpg';
 import longterm from '../../public/assets/longterm.webp';
@@ -23,7 +23,9 @@ import aboutus from '../../public/assets/aboutus.jpg';
 import blog1 from '../../public/assets/ukdriving.jpg';
 import blog2 from '../../public/assets/carinsurance.png';
 import blog3 from '../../public/assets/happyrental.jpg';
-import error from '../../public/assets/error.webp';
+import blog4 from '../../public/assets/blog4.webp';
+import blog5 from '../../public/assets/blog5.jpg';
+import error from '../../public/assets/error.png';
 import blackrock from '../../public/assets/BlackRock-logo.png'
 import closebrothers from '../../public/assets/closebrothers.png'
 import rac from '../../public/assets/rac.png'
@@ -57,5 +59,7 @@ export {
     error,
     blackrock,
     closebrothers,
-    rac
+    rac,
+    blog4,
+    blog5
  };

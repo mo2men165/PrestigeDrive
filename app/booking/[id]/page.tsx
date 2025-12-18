@@ -3,13 +3,16 @@ import { Suspense, useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { carsData, locations } from '@/constants';
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import Modal from 'react-modal';
 import { FaMapMarkerAlt } from 'react-icons/fa';
-import { useRentalData } from '@/app/contexts/RentalContext';
 import { useSearchParams } from "next/navigation";
+import { useRentalData } from '@/contexts/RentalContext';
+import GlobalLoader from '@/components/GlobalLoader';
+import { Car } from '@/types/types';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 const BookingSchema = Yup.object().shape({
   name: Yup.string().required('Name is required'),
@@ -28,7 +31,32 @@ const BookingSchema = Yup.object().shape({
   dropoffTime: Yup.string().required('Dropoff time is required'),
 });
 
+
 export default function BookingPage() {
+  const [carsData, setCarsData] = useState<Car[]>([]); 
+  const [locations, setLocations] = useState<any[]>([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "cars"));
+        const carsList: Car[] = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        })) as Car[];
+
+        setCarsData(carsList);
+
+        const locationsSnapshot = await getDocs(collection(db, 'locations'));
+        const locationsData = locationsSnapshot.docs
+            .map(doc => ({ id: doc.id, ...doc.data() }));
+            setLocations(locationsData);
+      } catch (error) {
+        console.error("Error fetching cars:", error);
+      }
+    };
+
+    fetchData();
+  });
   const handleSubmit = async (values: any) => {
     setIsLoading(true);
 
@@ -62,9 +90,6 @@ export default function BookingPage() {
 
     setTimeout(() => {
       setIsLoading(false);
-      setConfirmationMessage(
-        `Hi ${values.name}, thanks for using Prestige Drive! We have received your order for the ${car?.title}. Your pickup will be from ${values.pickupLocation} on ${values.pickupDate} at ${values.pickupTime} and your dropoff will be from ${values.dropoffLocation} on ${values.dropoffDate} at ${values.dropoffTime}. Your total price is £${totalPrice}. You will receive a confirmation email shortly, and a call from one of our team members within the next 24 hours to confirm your booking.`
-      );
     }, 2000);
   };
 
@@ -76,9 +101,9 @@ export default function BookingPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalValues, setModalValues] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [confirmationMessage, setConfirmationMessage] = useState('');
-
   const car = carsData.find((car) => car.id === id);
+  Modal.setAppElement('#root');
+  
 
   if (!car) {
     return (
@@ -155,13 +180,10 @@ export default function BookingPage() {
   };
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<GlobalLoader />}>
       <section className="container mx-auto py-12 my-16">
-      {confirmationMessage && (
-        <div className="bg-green-600 text-white p-4 rounded-md mb-8">
-          <p>{confirmationMessage}</p>
-        </div>
-      )}
+
+
 
       {/* Car Details */}
       <div className="bg-purple-50 p-8 rounded-xl shadow-sm mb-8">

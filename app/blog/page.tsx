@@ -9,7 +9,7 @@ export default function Blog() {
       <div className="bg-gradient-to-r from-[#0E253F] to-[#1B365D] rounded-lg p-8 text-white mb-12">
         <h2 className="text-4xl font-bold mb-4">Our Blog</h2>
         <p className="text-lg leading-8">
-          Stay updated with the latest news, tips, and updates from Prestige Drive. Check back regularly for new posts!
+          Stay updated with the latest news, tips, and updates from MyEasyDrive. Check back regularly for new posts!
         </p>
       </div>
 

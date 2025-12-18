@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { carrental, chauffeur, corporate, event } from '@/public/assets';
 import Button from '@/components/Button';
 import { Suspense } from 'react';
+import GlobalLoader from '@/components/GlobalLoader';
 
 const sectionVariants = {
   hidden: { opacity: 0, y: 50 },
@@ -18,7 +19,7 @@ export default function OurServices() {
   const selectedService = searchParams.get('service');
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<GlobalLoader />}>
       <section className="container mx-auto py-12 my-16">
       {/* Centered Header */}
       <div className="bg-gradient-to-r from-[#0E253F] to-[#1B365D] rounded-lg p-8 text-white mb-12">

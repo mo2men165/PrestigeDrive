@@ -3,9 +3,9 @@ import emailjs from 'emailjs-com';
 export async function POST(request: Request) {
   const { subject, body, recipient } = await request.json();
 
-  const serviceID = 'service_r8i8v6g';
-  const templateID = 'template_1fgx54n';
-  const userID = 'JNKdBh4-SqH_asdv7';  // You can find this in your EmailJS account
+  const serviceID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!;
+  const templateID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID_USER!;
+  const userID = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!;
 
   try {
     const response = await emailjs.send(serviceID, templateID, {

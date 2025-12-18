@@ -9,10 +9,10 @@ interface RentalData {
   pickupTime: string;
   dropoffTime: string;
   basePrice: number;
-  vat: number; 
-  totalPrice: number; 
-  discountAmount: number; 
-  valueAfterDiscount: number; 
+  vat: number;
+  totalPrice: number;
+  discountAmount: number;
+  valueAfterDiscount: number;
   hasDiscount: boolean;
   valueBeforeDiscount: number;
   totalDays: number;
@@ -27,6 +27,8 @@ interface RentalData {
 interface RentalContextType {
   rentalData: RentalData;
   setRentalData: (data: RentalData) => void;
+  isLoading: boolean;  // ✅ Add loading state
+  setLoading: (loading: boolean) => void; 
 }
 
 const RentalContext = createContext<RentalContextType | undefined>(undefined);
@@ -39,11 +41,11 @@ export const RentalProvider = ({ children }: { children: React.ReactNode }) => {
     dropoffDate: null,
     pickupTime: '12:30',
     dropoffTime: '08:30',
-    basePrice: 0, 
-    vat: 0, 
-    totalPrice: 0, 
-    discountAmount: 0, 
-    valueAfterDiscount: 0, 
+    basePrice: 0,
+    vat: 0,
+    totalPrice: 0,
+    discountAmount: 0,
+    valueAfterDiscount: 0,
     hasDiscount: false,
     valueBeforeDiscount: 0,
     totalDays: 0,
@@ -53,11 +55,13 @@ export const RentalProvider = ({ children }: { children: React.ReactNode }) => {
     phone: "",
     dob: "",
     carMake: ""
-
   });
 
+  const [isLoading, setLoading] = useState(true);
+
+
   return (
-    <RentalContext.Provider value={{ rentalData, setRentalData }}>
+    <RentalContext.Provider value={{ rentalData, setRentalData, isLoading, setLoading }}>
       {children}
     </RentalContext.Provider>
   );

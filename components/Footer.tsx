@@ -6,12 +6,12 @@ import { logo } from '@/public/assets';
 
 const Footer = () => {
   return (
-    <footer className="bg-[#0C1C2E] text-white py-12">
+    <footer className="bg-white text-primary py-12">
       <div className="container mx-auto px-4 ">
         <div className="mb-8 flex flex-col justify-center items-center">
-            <Image src={logo} alt="Prestige Drive" width={200} height={100} />
+            <Image src={logo} alt="MyEasyDrive" width={200} height={100} />
 
-          <p className="mt-4 text-gray-400">
+          <p className="mt-4 text-primary">
             Your trusted partner for luxury car rentals.
           </p>
         </div>
@@ -26,7 +26,7 @@ const Footer = () => {
                 <li key={index}>
                   <Link
                     href={link.href}
-                    className="text-gray-400 hover:text-secondary transition-colors"
+                    className="text-primary hover:text-secondary transition-colors"
                   >
                     {link.name}
                   </Link>
@@ -43,7 +43,7 @@ const Footer = () => {
                 <li key={index}>
                   <Link
                     href={`/services`}
-                    className="text-gray-400 hover:text-secondary transition-colors"
+                    className="text-primary hover:text-secondary transition-colors"
                   >
                     {service.name}
                   </Link>
@@ -55,7 +55,7 @@ const Footer = () => {
           {/* Contact Info */}
           <div>
             <h3 className="text-lg font-bold mb-4">Contact Info</h3>
-            <ul className="space-y-2 text-gray-400">
+            <ul className="space-y-2 text-primary">
               {contactInfo.map((info, index) => (
                 <li key={index}>
                   <strong>{info.label}:</strong> {info.value}
@@ -74,7 +74,7 @@ const Footer = () => {
                   <Link
                     key={index}
                     href={social.href}
-                    className="text-gray-400 hover:text-secondary transition-colors"
+                    className="text-primary hover:text-secondary transition-colors"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -88,8 +88,8 @@ const Footer = () => {
 
         {/* Copyright Notice */}
         <div className="text-center border-t border-gray-800 pt-6">
-          <p className="text-gray-400">
-            &copy; {new Date().getFullYear()} Prestige Drive. All Rights Reserved.
+          <p className="text-primary">
+            &copy; {new Date().getFullYear()} MyEasyDrive. All Rights Reserved.
           </p>
         </div>
       </div>
