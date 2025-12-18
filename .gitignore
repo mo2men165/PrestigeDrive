@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# utility scripts (one-time setup, not needed in production)
+firestoreUpload.ts
+firestoreUpload.js
