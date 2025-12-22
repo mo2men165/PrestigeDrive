@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import {
   Accordion,
@@ -25,10 +27,12 @@ const FAQ = () => {
         <Accordion type="single" collapsible>
           {faqs.map((faq) => (
             <AccordionItem key={faq.id} value={faq.id} className='bg-white'>
-              <AccordionTrigger className="text-left text-black">
-                <h3 className="text-lg font-bold text-primary">
+              <AccordionTrigger 
+                className="text-left text-black"
+              >
+                <span className="text-lg font-bold text-primary">
                   {faq.question}
-                </h3>
+                </span>
               </AccordionTrigger>
               <AccordionContent>
                 <p className="text-[16px] text-black my-5 p-3">{faq.answer}</p>

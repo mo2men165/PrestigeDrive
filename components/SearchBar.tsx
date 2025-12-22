@@ -105,7 +105,7 @@ const SearchBar = () => {
       {/* Collapsible Search Form */}
       <div
         className={`transition-all duration-300 ${
-          isExpanded ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+          isExpanded ? "max-h-[1000px] opacity-100 pointer-events-auto" : "max-h-0 opacity-0 pointer-events-none"
         }`}
       >
         <div className="flex flex-col space-y-4">
