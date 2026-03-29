@@ -1,0 +1,14 @@
+import type { MetadataRoute } from 'next';
+
+export default function robots(): MetadataRoute.Robots {
+  return {
+    rules: [
+      {
+        userAgent: '*',
+        allow: '/',
+        disallow: ['/booking/', '/api/'],
+      },
+    ],
+    sitemap: 'https://elitedrive4u.co.uk/sitemap.xml',
+  };
+}

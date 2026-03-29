@@ -2,21 +2,20 @@ import { articles } from '@/constants';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export default function Blog() {
+export default function BlogPreview() {
   return (
-    <section className="container mx-auto py-12 my-16">
-      <div className="bg-gradient-to-br from-[#0E253F] to-[#1B365D] rounded-2xl p-10 text-white mb-12">
-        <p className="text-sm font-semibold uppercase tracking-widest text-secondary mb-3">
+    <section className="py-12">
+      <div className="text-center mb-10">
+        <p className="text-sm font-semibold uppercase tracking-widest text-secondary mb-2">
           Insights &amp; Tips
         </p>
-        <h1 className="text-4xl font-bold mb-3">Our Blog</h1>
-        <p className="text-white/70 text-lg max-w-xl">
-          Stay updated with the latest news, tips, and updates from EliteDrive4U.
-        </p>
+        <h2 className="text-3xl font-bold text-gray-900">
+          Latest from Our Blog
+        </h2>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {articles.map((article) => (
+        {articles.slice(0, 3).map((article) => (
           <div
             key={article.id}
             className="group bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
@@ -29,7 +28,7 @@ export default function Blog() {
               />
             </div>
             <div className="p-6">
-              <h2 className="text-lg font-bold text-gray-900 mb-2">{article.title}</h2>
+              <h3 className="text-lg font-bold text-gray-900 mb-2">{article.title}</h3>
               <p className="text-sm text-gray-500 leading-relaxed mb-5">{article.description}</p>
               <Link
                 href={`/blog/${article.id}`}
@@ -40,6 +39,15 @@ export default function Blog() {
             </div>
           </div>
         ))}
+      </div>
+
+      <div className="text-center mt-12">
+        <Link
+          href="/blog"
+          className="inline-block px-8 py-3.5 border-2 border-primary text-primary font-semibold rounded-lg text-sm hover:bg-primary hover:text-white transition-all duration-300"
+        >
+          View All Articles
+        </Link>
       </div>
     </section>
   );

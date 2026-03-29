@@ -10,7 +10,7 @@ module.exports = {
   	extend: {
   		colors: {
 		primary: "#1B365D",
-  			secondary: "#F4B400",
+  			secondary: "#A88B5C",
 			text: "#EAEAEA",
   			neutral: '#EDEDED',
   			background: 'hsl(var(--background))',
@@ -48,14 +48,14 @@ module.exports = {
   		},
   		fontFamily: {
   			sans: [
-  				'Poppins',
+  				'var(--font-poppins)',
   				'Raleway',
   				'Montserrat',
   				'Lato',
   				'sans-serif'
   			],
   			serif: [
-  				'Playfair Display',
+  				'var(--font-playfair)',
   				'Cormorant',
   				'Libre Baskerville',
   				'Bodoni Moda',

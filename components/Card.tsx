@@ -4,6 +4,7 @@ import React, { Suspense } from 'react';
 import Button from './Button';
 import Image, { StaticImageData } from 'next/image';
 import { useSearchParams } from 'next/navigation';
+import { FaCar, FaGasPump, FaCogs, FaCheckCircle } from 'react-icons/fa';
 
 export interface CardProps {
   image: string | StaticImageData;
@@ -32,52 +33,65 @@ function CardContent({
   fuelType,
   transmission,
   id,
+  price,
 }: CardProps) {
   const searchParams = useSearchParams();
 
   return (
-    <div className="bg-neutral rounded-lg shadow-lg overflow-hidden transition-transform hover:scale-105">
-      {/* Image */}
-      <div className="relative h-48 w-full">
-        <Image src={image} alt={title} fill className="object-cover" />
+    <div className="group bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300">
+      {/* Image with gradient overlay */}
+      <div className="relative h-56 w-full overflow-hidden">
+        <Image
+          src={image}
+          alt={title}
+          fill
+          className="object-cover group-hover:scale-105 transition-transform duration-700"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+        {price && (
+          <div className="absolute bottom-3 left-3 bg-white/95 backdrop-blur-sm rounded-lg px-3 py-1.5 shadow-sm">
+            <span className="text-xs text-gray-500">From </span>
+            <span className="text-lg font-bold text-primary">£{price}</span>
+            <span className="text-xs text-gray-500">/day</span>
+          </div>
+        )}
       </div>
 
-      {/* Content */}
-      <div className="p-4">
-        <h2 className="text-xl font-bold text-primary mb-2">{title}</h2>
+      <div className="p-5">
+        <h2 className="text-lg font-bold text-gray-900 mb-3">{title}</h2>
 
-        {/* Additional Details */}
-        <div className="space-y-2 text-sm text-black mb-4">
-          <div className="flex justify-between">
-            <span>
-              <strong>Type:</strong> {type}
-            </span>
-            <span>
-              <strong>Fuel:</strong> {fuelType}
-            </span>
+        {/* Specs row */}
+        <div className="grid grid-cols-3 gap-2 mb-4">
+          <div className="flex flex-col items-center bg-gray-50 rounded-lg py-2.5 px-1">
+            <FaCar className="text-primary text-sm mb-1" />
+            <span className="text-[11px] text-gray-500 text-center leading-tight">{type}</span>
           </div>
-          <div className="flex justify-between">
-            <span>
-              <strong>Transmission:</strong> {transmission}
-            </span>
+          <div className="flex flex-col items-center bg-gray-50 rounded-lg py-2.5 px-1">
+            <FaGasPump className="text-primary text-sm mb-1" />
+            <span className="text-[11px] text-gray-500 text-center leading-tight">{fuelType}</span>
+          </div>
+          <div className="flex flex-col items-center bg-gray-50 rounded-lg py-2.5 px-1">
+            <FaCogs className="text-primary text-sm mb-1" />
+            <span className="text-[11px] text-gray-500 text-center leading-tight">{transmission}</span>
           </div>
         </div>
 
         {/* Features */}
-        <ul className="text-sm text-black mb-4">
-          {features.map((feature, index) => (
-            <li key={index} className="flex items-center gap-2">
-              <span>•</span> {feature}
-            </li>
+        <div className="flex flex-wrap gap-x-4 gap-y-1 mb-5">
+          {features.slice(0, 3).map((feature, index) => (
+            <span key={index} className="flex items-center gap-1.5 text-xs text-gray-500">
+              <FaCheckCircle className="text-secondary text-[10px]" />
+              {feature}
+            </span>
           ))}
-        </ul>
+        </div>
 
-        <div className="flex items-center justify-start gap-8">
-          <Button variant="primary" href={`/booking/${id}?${searchParams.toString()}`}>
+        <div className="flex items-center gap-3">
+          <Button variant="primary" href={`/booking/${id}?${searchParams.toString()}`} className="flex-1 text-center">
             Reserve Now
           </Button>
-          <Button variant="secondary" href={`/cars/${id}`}>
-            View Details
+          <Button variant="secondary" href={`/cars/${id}`} className="flex-1 text-center">
+            Details
           </Button>
         </div>
       </div>
@@ -85,13 +99,20 @@ function CardContent({
   );
 }
 
-// Placeholder while Suspense is loading
 function LoadingCard() {
   return (
-    <div className="bg-neutral rounded-lg shadow-lg p-4 animate-pulse">
-      <div className="h-48 bg-gray-300 rounded"></div>
-      <div className="h-6 bg-gray-300 my-4 w-3/4"></div>
-      <div className="h-4 bg-gray-300 w-1/2"></div>
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 animate-pulse">
+      <div className="h-56 bg-gray-100 rounded-xl" />
+      <div className="mt-4 h-5 bg-gray-100 rounded w-3/4" />
+      <div className="mt-3 grid grid-cols-3 gap-2">
+        <div className="h-14 bg-gray-100 rounded-lg" />
+        <div className="h-14 bg-gray-100 rounded-lg" />
+        <div className="h-14 bg-gray-100 rounded-lg" />
+      </div>
+      <div className="mt-4 flex gap-3">
+        <div className="h-10 bg-gray-100 rounded-lg flex-1" />
+        <div className="h-10 bg-gray-100 rounded-lg flex-1" />
+      </div>
     </div>
   );
 }

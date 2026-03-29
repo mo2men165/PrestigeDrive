@@ -1,56 +1,68 @@
 'use client';
+
 import { motion } from 'framer-motion';
 import { FaSearch, FaCalendarCheck, FaCar } from 'react-icons/fa';
-
 
 const steps = [
   {
     id: 1,
-    icon: <FaSearch className="text-4xl text-primary mb-4" />,
+    icon: FaSearch,
     title: 'Search',
-    description: 'Find the perfect car for your needs.',
+    description: 'Browse our curated fleet and find the perfect vehicle for your journey.',
   },
   {
     id: 2,
-    icon: <FaCalendarCheck className="text-4xl text-primary mb-4" />,
+    icon: FaCalendarCheck,
     title: 'Book',
-    description: 'Select your dates and confirm your booking.',
+    description: 'Choose your dates, select your protection plan, and confirm in minutes.',
   },
   {
     id: 3,
-    icon: <FaCar className="text-4xl text-primary mb-4" />,
+    icon: FaCar,
     title: 'Drive',
-    description: 'Pick up your car and hit the road!',
+    description: 'Collect your vehicle — or let our chauffeur come to you — and enjoy the ride.',
   },
 ];
 
-const HowItWorks = () => {
-  const cardVariants = {
-    hidden: { opacity: 0, x: -100 }, // Start from the left
-    visible: { opacity: 1, x: 0 }, // Move to the original position
-  };
+const fadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0 },
+};
 
+const HowItWorks = () => {
   return (
-    <section className="mx-auto px-4 py-12 my-16">
-      <h2 className="text-4xl font-sans font-bold text-center uppercase mb-6">
-        How It Works
-      </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 ">
+    <section className="py-12">
+      <div className="text-center mb-10">
+        <p className="text-sm font-semibold uppercase tracking-widest text-secondary mb-2">
+          Simple Process
+        </p>
+        <h2 className="text-3xl font-bold text-gray-900">
+          How It Works
+        </h2>
+      </div>
+
+      <div className="relative grid grid-cols-1 md:grid-cols-3 gap-10">
+        {/* Connecting line (desktop only) */}
+        <div className="hidden md:block absolute top-16 left-[20%] right-[20%] h-px bg-gray-200" />
+
         {steps.map((step, index) => (
           <motion.div
             key={step.id}
-            className="bg-neutral rounded-lg shadow-lg p-6 text-center transition-transform hover:scale-105"
-            variants={cardVariants}
+            className="relative flex flex-col items-center text-center"
+            variants={fadeUp}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.5 }}
-            transition={{ duration: 0.8, delay: index * 0.5 }} // Increased delay
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: index * 0.2 }}
           >
-            {step.icon}
-            <h3 className="text-xl font-bold  mb-2">
-              {step.title}
-            </h3>
-            <p className="text-sm text-gray-600">{step.description}</p>
+            <div className="relative z-10 w-20 h-20 rounded-full bg-primary flex items-center justify-center mb-6 shadow-lg">
+              <step.icon className="text-white text-2xl" />
+              <span className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-secondary text-white text-xs font-bold flex items-center justify-center shadow">
+                {step.id}
+              </span>
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">{step.title}</h3>
+            <p className="text-sm text-gray-500 max-w-xs leading-relaxed">{step.description}</p>
           </motion.div>
         ))}
       </div>

@@ -56,30 +56,22 @@ export default function BookingPage() {
     };
 
     fetchData();
-  });
+  }, []);
   const handleSubmit = async (values: any) => {
     setIsLoading(true);
 
-    // Calculate price breakdown
-    const { basePrice, vat, totalPrice, discountAmount, valueAfterDiscount, hasDiscount, valueBeforeDiscount, days } =
-      calculateTotalPrice(values);
+    const { basePrice, totalPrice, days } = calculateTotalPrice(values);
 
-    // Update rental data in context
     setRentalData({
       ...rentalData,
-      pickupDate: new Date(values.pickupDate),
-      dropoffDate: new Date(values.dropoffDate),
+      pickupDate: new Date(values.pickupDate).toISOString(),
+      dropoffDate: new Date(values.dropoffDate).toISOString(),
       pickupLocation: values.pickupLocation,
       dropoffLocation: values.dropoffLocation,
       pickupTime: values.pickupTime,
       dropoffTime: values.dropoffTime,
       basePrice: basePrice ?? 0,
-      vat: vat ?? 0,
       totalPrice: totalPrice ?? 0,
-      discountAmount: discountAmount ?? 0,
-      valueAfterDiscount: valueAfterDiscount ?? 0,
-      hasDiscount: hasDiscount ?? false,
-      valueBeforeDiscount: valueBeforeDiscount ?? 0,
       totalDays: days ?? 0,
       carMake: car?.title ?? '',
       name: values.name,
@@ -94,8 +86,7 @@ export default function BookingPage() {
   };
 
   const searchParams = useSearchParams();
-  const { rentalData, setRentalData } = useRentalData(); // Use the context
-  console.log("Rental Data in BookingPage:", rentalData); // Debugging
+  const { rentalData, setRentalData } = useRentalData();
   const { id } = useParams();
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -127,47 +118,25 @@ export default function BookingPage() {
     dropoffTime: searchParams.get("dropoffTime") || "08:30",
   };
 
-  console.log("Initial Values in BookingPage:", initialValues);
-
   const calculateTotalPrice = (values: any) => {
     if (!values.pickupDate || !values.dropoffDate) {
-      return { days: 0, basePrice: 0, vat: 0, totalPrice: 0 };
+      return { days: 0, basePrice: 0, totalPrice: 0 };
     }
 
     const pickupDate = new Date(values.pickupDate);
     const dropoffDate = new Date(values.dropoffDate);
 
     if (isNaN(pickupDate.getTime()) || isNaN(dropoffDate.getTime())) {
-      return { days: 0, basePrice: 0, vat: 0, totalPrice: 0 };
+      return { days: 0, basePrice: 0, totalPrice: 0 };
     }
 
     const days = Math.ceil(
       (dropoffDate.getTime() - pickupDate.getTime()) / (1000 * 60 * 60 * 24)
     );
-    let basePrice = days * car.price;
-    const vat = basePrice * 0.2;
-    let totalPrice = basePrice + vat;
+    const basePrice = days * car.price;
+    const totalPrice = basePrice;
 
-    // Calculate discount details if rental is for 30+ days
-    let valueBeforeDiscount = totalPrice;
-    let discountAmount = 0;
-    let valueAfterDiscount = totalPrice;
-
-    if (days >= 30) {
-      discountAmount = totalPrice * 0.3; // 30% discount
-      valueAfterDiscount = totalPrice - discountAmount;
-    }
-
-    return {
-      days,
-      basePrice,
-      vat,
-      totalPrice: valueAfterDiscount, // Final price after discount
-      valueBeforeDiscount,
-      discountAmount,
-      valueAfterDiscount,
-      hasDiscount: days >= 30, // Flag to check if discount is applied
-    };
+    return { days, basePrice, totalPrice };
   };
 
   const openModal = (values: any) => {
@@ -186,20 +155,20 @@ export default function BookingPage() {
 
 
       {/* Car Details */}
-      <div className="bg-purple-50 p-8 rounded-xl shadow-sm mb-8">
-        <h2 className="text-3xl font-bold text-primary mb-4">{car.title}</h2>
-        <p className="text-lg text-gray-700 mb-6">{car.description}</p>
-        <div className="space-y-4">
-          <div className="flex items-center space-x-3">
-            <span className="text-primary font-semibold">Price:</span>
-            <span className="text-gray-700">£{car.price} / day</span>
-          </div>
+      <div className="bg-gradient-to-br from-[#0E253F] to-[#1B365D] rounded-2xl p-8 text-white mb-8">
+        <h2 className="text-3xl font-bold mb-3">{car.title}</h2>
+        <p className="text-white/70 leading-relaxed mb-4">{car.description}</p>
+        <div className="inline-flex items-center gap-2 bg-white/10 rounded-lg px-4 py-2">
+          <span className="text-sm text-white/60">From</span>
+          <span className="text-lg font-bold">£{car.price}</span>
+          <span className="text-sm text-white/60">/ day</span>
         </div>
       </div>
 
       {/* Booking Form */}
-      <div className="bg-white p-8 rounded-xl shadow-sm">
-        <h2 className="text-3xl font-bold text-primary mb-6">Reservation Form</h2>
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8">
+        <h2 className="text-2xl font-bold text-gray-900 mb-1">Reservation Form</h2>
+        <p className="text-sm text-gray-400 mb-8">Fill in the details below to proceed with your booking.</p>
         <Formik
           initialValues={initialValues}
           validationSchema={BookingSchema}
@@ -214,7 +183,7 @@ export default function BookingPage() {
               <Form className="space-y-6">
                 {/* Who's Driving? Section */}
                 <div className="space-y-6">
-                  <h3 className="text-2xl font-semibold text-primary">Who's Driving?</h3>
+                  <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-400">Personal Details</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label htmlFor="name" className="block text-sm font-medium text-gray-700">
@@ -273,7 +242,7 @@ export default function BookingPage() {
 
                 {/* Rental Dates Section */}
                 <div className="space-y-6">
-                  <h3 className="text-2xl font-semibold text-primary">Rental Dates</h3>
+                  <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-400">Rental Details</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Pickup Location */}
                     <div>
@@ -286,6 +255,13 @@ export default function BookingPage() {
                           id="pickupLocation"
                           name="pickupLocation"
                           className="w-full p-2 border rounded-lg"
+                          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                            const val = e.target.value;
+                            setFieldValue('pickupLocation', val);
+                            if (!values.dropoffLocation) {
+                              setFieldValue('dropoffLocation', val);
+                            }
+                          }}
                         >
                           <option value="" disabled>Choose pickup location</option>
                           {locations.map((location) => (
@@ -354,7 +330,6 @@ export default function BookingPage() {
                           id="dropoffLocation"
                           name="dropoffLocation"
                           className="w-full p-2 border rounded-lg"
-                          value={values.dropoffLocation || values.pickupLocation} // Default to pickupLocation if empty
                         >
                           <option value="" disabled>
                             Choose dropoff location
@@ -432,10 +407,10 @@ export default function BookingPage() {
 
                 <button
                   type="submit"
-                  className="w-full py-3 bg-primary text-white font-semibold rounded-lg hover:bg-white hover:text-primary hover:border-primary hover:border transition-all duration-300 ease-in-out"
+                  className="w-full py-3 bg-primary text-white font-semibold rounded-lg text-sm hover:bg-primary/90 transition-colors duration-200"
                   disabled={isLoading}
                 >
-                  {isLoading ? 'Loading...' : 'Pick Your Protection Plan'}
+                  {isLoading ? 'Processing...' : 'Pick Your Protection Plan'}
                 </button>
               </Form>
             );
@@ -517,36 +492,11 @@ export default function BookingPage() {
                     </h3>
                     <div className="space-y-3">
                       <div className="flex justify-between">
-                        <span className="text-gray-600">Base Price:</span>
+                        <span className="text-gray-600">Rental ({calculateTotalPrice(modalValues).days} days):</span>
                         <span className="font-medium text-gray-800">
                           £{calculateTotalPrice(modalValues).basePrice.toFixed(2)}
                         </span>
                       </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">VAT (20%):</span>
-                        <span className="font-medium text-gray-800">
-                          £{calculateTotalPrice(modalValues).vat.toFixed(2)}
-                        </span>
-                      </div>
-                      {calculateTotalPrice(modalValues).hasDiscount && (
-                        <>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">Value Before Discount:</span>
-                            <span className="font-medium text-gray-800">
-                              £{calculateTotalPrice(modalValues).valueBeforeDiscount?.toFixed(2)}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">Discount (30%):</span>
-                            <span className="font-medium text-green-600">
-                              -£{calculateTotalPrice(modalValues).discountAmount?.toFixed(2)}
-                            </span>
-                          </div>
-                          <div className="text-sm text-gray-600">
-                            *Discount applied for renting 30+ days.
-                          </div>
-                        </>
-                      )}
                       <div className="flex justify-between border-t pt-3">
                         <span className="text-gray-800 font-semibold">Total Price:</span>
                         <span className="font-bold text-primary text-lg">

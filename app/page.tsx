@@ -1,10 +1,18 @@
+import type { Metadata } from 'next';
 import SearchBar from '@/components/SearchBar';
+
+export const metadata: Metadata = {
+  title: 'EliteDrive4U — Premium Car Rentals & Chauffeur Services in Brighton',
+  description:
+    'Hire luxury cars at affordable prices across the UK & Ireland. SUVs, sedans, electric vehicles and professional chauffeur services. Book online with EliteDrive4U.',
+  alternates: { canonical: 'https://elitedrive4u.co.uk' },
+};
 import Hero from '@/components/Hero';
 import Featured from '@/components/Featured';
 import FeaturedDeals from '@/components/FeaturedDeals';
 import WhyChooseUs from '@/components/WhyChooseUs';
 import Testimonials from '@/components/Testimonials';
-import Blog from './blog/page';
+import BlogPreview from '@/components/BlogPreview';
 import HowItWorks from '@/components/HowItWorks';
 import PopularCategories from '@/components/PopularCategories';
 import CTABanner from '@/components/CTABanner';
@@ -17,18 +25,18 @@ export default function Home() {
     <>
       <SearchBar />
       <Hero />
-      <div className="container mx-auto py-6">
-        <AboutSection />  
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <AboutSection />
         <Featured />
         <FeaturedDeals />
         <CTABanner />
         <WhyChooseUs />
-        <Partners />
         <HowItWorks />
         <PopularCategories />
         <FAQ />
         <Testimonials />
-        <Blog />
+        <Partners />
+        <BlogPreview />
       </div>
     </>
   );

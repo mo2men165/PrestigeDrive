@@ -1,5 +1,5 @@
 import { allianz, electric, family, longterm, luxury, suv, weekend, blog1, blog2, blog3, blackrock, closebrothers, rac, blog4, blog5 } from "@/public/assets";
-import { FaShieldAlt, FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaHandsHelping, FaRocket } from 'react-icons/fa';
+import { FaShieldAlt, FaFacebook, FaHandsHelping, FaRocket } from 'react-icons/fa';
 import { GiProgression } from "react-icons/gi";
 
   export const navLinks = [
@@ -17,7 +17,7 @@ import { GiProgression } from "react-icons/gi";
       title: 'Weekend Special',
       description: 'Get 20% off on all weekend rentals. Limited time only!',
       ctaText: 'Reserve Now',
-      ctaLink: '#',
+      ctaLink: '/cars',
     },
     {
       id: 2,
@@ -25,7 +25,7 @@ import { GiProgression } from "react-icons/gi";
       title: 'Long-Term Rental',
       description: 'Rent for a month and get 30% off. Perfect for long trips!',
       ctaText: 'Reserve Now',
-      ctaLink: '#',
+      ctaLink: '/cars',
     },
     {
       id: 3,
@@ -33,7 +33,7 @@ import { GiProgression } from "react-icons/gi";
       title: 'Family Package',
       description: 'Special rates for family-sized vehicles. Travel together!',
       ctaText: 'Reserve Now',
-      ctaLink: '#',
+      ctaLink: '/cars',
     },
   ];
 
@@ -118,16 +118,13 @@ import { GiProgression } from "react-icons/gi";
   ];
   
   export const contactInfo = [
-    { label: 'Address', value: '41 Westfield Crescent, Brighton, UK. BN1 8JB' },
-    { label: 'Phone', value: '+44 (0) 777 777 7777' },
-    { label: 'Email', value: 'info@myeasydrive.com' },
+    { label: 'Address', value: 'Citibase Brighton, 95 Ditchling Rd, Brighton and Hove, Brighton BN1 4ST' },
+    { label: 'Phone', value: '03333391475' },
+    { label: 'Email', value: 'info@elitedrive4u.co.uk' },
   ];
   
   export const socialMedia = [
-    { icon: FaFacebook, href: '/' },
-    { icon: FaTwitter, href: '/' },
-    { icon: FaInstagram, href: '/' },
-    { icon: FaLinkedin, href: '/' },
+    { icon: FaFacebook, href: 'https://www.facebook.com/share/18NmfMR7Ku/?mibextid=wwXIfr' },
   ];
   
   export const categories = [
@@ -158,7 +155,7 @@ import { GiProgression } from "react-icons/gi";
     {
       id: '1',
       question: 'What documents do I need to rent a car?',
-      answer: `With MyEasyDrive you only need a valid driver's license.`,
+      answer: `With EliteDrive4U you only need a valid driver's license.`,
     },
     {
       id: '2',
@@ -168,7 +165,7 @@ import { GiProgression } from "react-icons/gi";
     {
       id: '3',
       question: 'What is the minimum age to rent a car?',
-      answer: 'The minimum age to rent a car is typically 21 years old.',
+      answer: 'The minimum age to rent a car is 18 years old. Please note that some vehicles may have higher age requirements due to insurance restrictions. Feel free to check with our team if you have any questions about eligibility for a specific car.',
     },
     {
       id: '4',

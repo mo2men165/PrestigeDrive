@@ -6,10 +6,9 @@ import { FaChevronLeft} from 'react-icons/fa';
 import { Switch } from '@headlessui/react';
 import Button from '@/components/Button';
 import Modal from 'react-modal';
-import emailjs from 'emailjs-com';
 import { useRentalData } from '@/contexts/RentalContext';
 import { db } from '@/lib/firebase';
-import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
 
 export default function AdditionalOptionsPage() {
 const { rentalData, setRentalData } = useRentalData();
@@ -20,8 +19,6 @@ const [detailsVisible, setDetailsVisible] = useState<{ [key: number]: boolean }>
 const [isBreakdownModalOpen, setIsBreakdownModalOpen] = useState(false);
 const [loading, setLoading] = useState(false);
 const [dataLoading, setDataLoading] = useState(false);
-const [confirmationMessage, setConfirmationMessage] = useState('');
-const [countdown, setCountdown] = useState(45);
 const [additionalOptions, setAdditionalOptions] = useState<any[]>([]);
 
 useEffect(() => {
@@ -48,86 +45,73 @@ useEffect(() => {
 const handleReserveNow = async () => {
   setLoading(true);
 
-  setTimeout(async () => {
+  const addonsNames = additionalOptions
+    .filter((option) => selectedOptions[option.id])
+    .map((option) => option.name)
+    .join(", ") || "None";
+
+  const addonsTotalCost = additionalOptions
+    .filter((option) => selectedOptions[option.id])
+    .reduce((total, option) => total + (option.type === 'per day' ? option.price * rentalData.totalDays : option.price), 0);
+
+  const bookingRef = `ED4U-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+
+  setRentalData({
+    ...rentalData,
+    selectedAddons: addonsNames,
+    addonsCost: addonsTotalCost,
+    finalTotalPrice: updatedTotalPrice,
+    bookingRef,
+  });
+
+  const bookingData = {
+    bookingRef,
+    name: rentalData.name || "",
+    email: rentalData.email || "",
+    phone: rentalData.phone || "",
+    carTitle: rentalData.carMake || "",
+    selectedPlan: rentalData.selectedPlan?.name || "",
+    selectedPlanPrice: rentalData.selectedPlan?.price || 0,
+    pickupLocation: rentalData.pickupLocation || "",
+    pickupDate: rentalData.pickupDate || "",
+    pickupTime: rentalData.pickupTime || "",
+    dropoffLocation: rentalData.dropoffLocation || "",
+    dropoffDate: rentalData.dropoffDate || "",
+    dropoffTime: rentalData.dropoffTime || "",
+    totalDays: rentalData.totalDays || 0,
+    basePrice: rentalData.basePrice || 0,
+    planCost: (rentalData.selectedPlan?.price || 0) * (rentalData.totalDays || 0),
+    totalPrice: updatedTotalPrice || 0,
+    selectedAddons: addonsNames,
+    addonsCost: addonsTotalCost,
+    createdAt: new Date().toISOString(),
+  };
+
+  try {
+    await setDoc(doc(db, 'bookings', bookingRef), bookingData);
+
+    fetch('/api/send-email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        ...bookingData,
+        pickupDate: rentalData.pickupDate ? new Date(rentalData.pickupDate).toLocaleDateString('en-GB') : "",
+        dropoffDate: rentalData.dropoffDate ? new Date(rentalData.dropoffDate).toLocaleDateString('en-GB') : "",
+        basePrice: rentalData.basePrice?.toFixed(2) || "0.00",
+        planCost: ((rentalData.selectedPlan?.price || 0) * (rentalData.totalDays || 0)).toFixed(2),
+        planCostPerDay: rentalData.selectedPlan?.price?.toFixed(2) || "0.00",
+        totalPrice: updatedTotalPrice?.toFixed(2) || "0.00",
+        addonsCost: addonsTotalCost.toFixed(2),
+      }),
+    }).catch((err) => console.error('Email send error:', err));
+
+    router.push(`/booking/confirmation/${bookingRef}`);
+  } catch (error) {
+    console.error('Error saving booking:', error);
+    alert('There was an issue confirming your booking. Please try again.');
+  } finally {
     setLoading(false);
-
-    const message = `Hi ${name}, thanks for using MyEasyDrive! We have received your order for the ${carMake}. 
-    Your pickup will be from ${pickupLocation} on ${pickupDate},
-    and your dropoff will be from ${dropoffLocation} on ${dropoffDate}.
-    Your total price is £${totalPrice}. You will receive a confirmation email shortly, 
-    and a call from one of our team members within the next 24 hours to confirm your booking.`;
-
-    setConfirmationMessage(message);   
-    
-    const emailParams = {
-      name: rentalData.name || "",
-      email: rentalData.email || "",
-      phone: rentalData.phone || "",
-      carTitle: rentalData.carMake || "",
-      selectedPlan: rentalData.selectedPlan?.name || "",
-      pickupLocation: rentalData.pickupLocation || "",
-      pickupDate: rentalData.pickupDate ? new Date(rentalData.pickupDate).toLocaleDateString('en-GB') : "",
-      pickupTime: rentalData.pickupTime || "",
-      dropoffLocation: rentalData.dropoffLocation || "",
-      dropoffDate: rentalData.dropoffDate ? new Date(rentalData.dropoffDate).toLocaleDateString('en-GB') : "",
-      dropoffTime: rentalData.dropoffTime || "",
-      totalDays: rentalData.totalDays || "",
-    
-      // Price Breakdown
-      basePrice: rentalData.basePrice?.toFixed(2) || "0.00",
-      discountAmount: rentalData.discountAmount?.toFixed(2) || "0.00",
-      valueBeforeDiscount: rentalData.valueBeforeDiscount?.toFixed(2) || "0.00",
-      vat: rentalData.vat?.toFixed(2) || "0.00",
-      vatPercentage: ((rentalData.vat / rentalData.valueBeforeDiscount) * 100).toFixed(2) || "0.00",
-      planCost: rentalData.selectedPlan?.price * totalDays || "0.00",
-      planCostPerDay: (rentalData.selectedPlan?.price).toFixed(2) || "0.00",
-      totalPrice: updatedTotalPrice?.toFixed(2) || "0.00",
-    
-      // Selected Add-ons
-      selectedAddons: additionalOptions
-        .filter((option) => selectedOptions[option.id])
-        .map((option) => option.name)
-        .join(", ") || "None",
-      addonsCost: additionalOptions
-        .filter((option) => selectedOptions[option.id])
-        .reduce((total, option) => total + (option.type === 'per day' ? option.price * rentalData.totalDays : option.price), 0)
-        .toFixed(2) || "0.00",
-    };
-    
-
-    console.log("Email Params:", emailParams);
-    
-    try {
-      // Send email to customer
-      await emailjs.send(
-        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
-        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID_USER!,
-        emailParams,
-        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
-      );
-      
-      // Send email to owner
-      await emailjs.send(
-        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
-        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID_OWNER!,
-        emailParams,
-        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
-      );
-
-      // Start the countdown
-      let timer = 45;
-      const interval = setInterval(() => {
-        setCountdown((prev) => prev - 1);
-        timer -= 1;
-        if (timer === 0) {
-          clearInterval(interval);
-          router.push('/');
-        }
-      }, 1000);
-    } catch (error) {
-      console.error('Error sending email:', error);
-    }
-  }, 2000);
+  }
 };
 
 
@@ -145,7 +129,7 @@ setDetailsVisible((prev) => ({
 }));
 };
 
-const { pickupDate, dropoffDate, basePrice, totalPrice, discountAmount, pickupTime, dropoffTime, vat, hasDiscount, valueBeforeDiscount, totalDays, carMake, pickupLocation, dropoffLocation, selectedPlan, name, email, dob, phone  } = rentalData;
+const { pickupDate, dropoffDate, basePrice, totalPrice, pickupTime, dropoffTime, totalDays, carMake, pickupLocation, dropoffLocation, selectedPlan, name, email, dob, phone  } = rentalData;
 
 // Format the rental period as "8 days - (Feb 11th - Feb 19th)"
 const formatDate = (date: Date | any) => {
@@ -176,11 +160,17 @@ Modal.setAppElement('#root');
 return (
   <section className="container mx-auto py-12 my-16">
     {/* Header */}
-    <div className="flex items-center space-x-4 mb-8">
-      <button onClick={() => router.back()} className="text-gray-800 hover:text-gray-600 transition-all">
-        <FaChevronLeft className="text-2xl" />
+    <div className="flex items-center gap-4 mb-10">
+      <button
+        onClick={() => router.back()}
+        className="w-10 h-10 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 transition-colors"
+      >
+        <FaChevronLeft />
       </button>
-      <h1 className="text-3xl font-bold text-gray-900">Pick Your Add-ons</h1>
+      <div>
+        <h1 className="text-2xl font-bold text-gray-900">Pick Your Add-ons</h1>
+        <p className="text-sm text-gray-400 mt-0.5">Enhance your rental experience with optional extras.</p>
+      </div>
     </div>
   
     {/* Main Grid Layout */}
@@ -188,7 +178,7 @@ return (
       {/* Left Side - Add-ons List */}
       <div className="lg:col-span-2 space-y-6">
       {additionalOptions.map((option) => (
-    <div key={option.id} className="border-2 border-gray-300 rounded-lg p-6 bg-white shadow-md">
+    <div key={option.id} className="border border-gray-100 rounded-2xl p-6 bg-white shadow-sm hover:shadow-md transition-shadow">
       <div className="flex items-center justify-between">
         {/* Icon, Name, and Price */}
         <div className="flex items-center space-x-4">
@@ -217,7 +207,7 @@ return (
       </div>
   
       {/* Details Button */}
-      <button onClick={() => toggleDetails(option.id)} className="flex bg-primary items-center mt-3 text-sm text-white hover:underline">
+      <button onClick={() => toggleDetails(option.id)} className="flex items-center mt-3 text-xs text-gray-400 hover:text-primary transition-colors">
         <span dangerouslySetInnerHTML={{ __html: infoIconSvg }} className="mr-2 w-4 h-4" />
         Details
       </button>
@@ -232,8 +222,8 @@ return (
       </div>
   
       {/* Right Side - Booking Overview */}
-      <div className="border-2 border-gray-300 bg-gray-50 p-6 rounded-lg shadow-md space-y-6">
-        <h2 className="text-xl font-bold text-gray-900">Your Booking Overview</h2>
+      <div className="bg-white border border-gray-100 p-6 rounded-2xl shadow-sm space-y-5 sticky top-28">
+        <h2 className="text-lg font-bold text-gray-900">Your Booking Overview</h2>
   
         {/* Car Details */}
         <div className="border-b pb-4 border-gray-300">
@@ -294,26 +284,14 @@ return (
   
         {/* Confirm Button */}
         <button 
-        className="w-full bg-primary text-white hover:bg-white hover:text-primary hover:border-primary border border-transparent" 
+        className="w-full py-3 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-primary/90 transition-colors duration-200" 
         onClick={()=>handleReserveNow()} 
         disabled={loading}>
-        {loading ? 'Loading...' : 'Confirm Reservation'}
+        {loading ? 'Processing...' : 'Confirm Reservation'}
         </button>
         <Button className="w-full " variant="secondary" onClick={()=>setIsBreakdownModalOpen(true)}>
           Price Breakdown
         </Button>
-  
-        {confirmationMessage && (
-          <div className="bg-green-600 text-white p-4 rounded-md mt-4">
-            <p>{confirmationMessage}</p>
-          </div>
-        )}
-  
-        {confirmationMessage && (
-          <p className="mt-2 text-gray-700">
-            Redirecting to homepage in {countdown} seconds...
-          </p>
-        )}
   
         
       </div>
@@ -382,56 +360,39 @@ return (
             </h3>
             <div className="space-y-3">
               <div className="flex justify-between">
-                <span className="text-gray-600">Base Price:</span>
+                <span className="text-gray-600">Rental ({totalDays} days):</span>
                 <span className="font-medium text-gray-800">£{basePrice?.toFixed(2)}</span>
               </div>
-              {hasDiscount && (
+
+              {selectedPlan && (
                 <>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Discount:</span>
-                    <span className="font-medium text-green-600">-£{discountAmount?.toFixed(2)}</span>
+                    <span className="text-gray-600">Protection Plan ({selectedPlan.name}):</span>
+                    <span className="font-medium text-gray-800">£{(selectedPlan.price * totalDays).toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Price Before Discount:</span>
-                    <span className="font-medium text-gray-800">£{valueBeforeDiscount?.toFixed(2)}</span>
+                    <span className="text-xs text-gray-400">Per day:</span>
+                    <span className="text-xs text-gray-400">£{selectedPlan.price?.toFixed(2)}</span>
                   </div>
                 </>
               )}
-              <div className="flex justify-between">
-                <span className="text-gray-600">VAT:</span>
-                <span className="font-medium text-gray-800">£{vat.toFixed(2)}</span>
-              </div>
-  
-              {selectedPlan && (
-                  <>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Plan Cost:</span>
-                      <span className="font-medium text-gray-800">£{selectedPlan.price?.toFixed(2) * totalDays }</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Plan Cost Per Day:</span>
-                      <span className="font-medium text-gray-800">£{selectedPlan.price?.toFixed(2)}</span>
-                    </div>
-                  </>
-                )}
-  
-              {/* Selected Add-ons */}
+
               {Object.values(selectedOptions).some(Boolean) && (
                 <div className="mt-4">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2">🛠 Selected Add-ons</h3>
+                  <h3 className="text-sm font-semibold text-gray-800 mb-2">Selected Add-ons</h3>
                   <ul className="space-y-2">
                     {additionalOptions
                       .filter(option => selectedOptions[option.id])
                       .map(option => (
                         <li key={option.id} className="flex justify-between text-gray-800">
                           <span>{option.name}</span>
-                          <span>£{(option.type === 'per day' ? option.price * totalDays : option.price)?.toFixed(2)}</span>
+                          <span>£{(option.type === 'per day' ? option.price * totalDays : option.price).toFixed(2)}</span>
                         </li>
                       ))}
                   </ul>
                 </div>
               )}
-  
+
               <div className="border-t pt-3 mt-3 flex justify-between font-bold text-lg text-gray-900">
                 <span>Total Price:</span>
                 <span>£{updatedTotalPrice.toFixed(2)}</span>

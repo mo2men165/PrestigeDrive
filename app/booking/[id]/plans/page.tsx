@@ -8,7 +8,6 @@ import { useRentalData } from '@/contexts/RentalContext';
 import { db } from '@/lib/firebase';
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import GlobalLoader from '@/components/GlobalLoader';
-import { log } from 'console';
 
 
 export default function PlansPage() {
@@ -38,7 +37,6 @@ export default function PlansPage() {
         const protectionDocSnap = await getDoc(protectionDocRef);
 
         if (protectionDocSnap.exists()) {
-          console.log(protectionDocSnap.data());
           setProtectionDetails(protectionDocSnap.data().default);
         }
 
@@ -58,12 +56,11 @@ export default function PlansPage() {
   }
 
   // Extract rental details
-  const { pickupDate, dropoffDate, basePrice, totalPrice, discountAmount, pickupTime, dropoffTime, vat, hasDiscount, valueBeforeDiscount, totalDays } = rentalData;
+  const { pickupDate, dropoffDate, basePrice, totalPrice, pickupTime, dropoffTime, totalDays } = rentalData;
 
-  // Calculate the total price including the selected plan
   const selectedPlanDetails = selectedPlan !== null ? plans.find((plan) => plan.id === selectedPlan) : null;
   const planCost = selectedPlanDetails ? selectedPlanDetails.price * totalDays : 0;
-  const updatedTotalPrice = basePrice + vat + planCost - (hasDiscount ? discountAmount : 0);
+  const updatedTotalPrice = basePrice + planCost;
 
   const handleContinue = () => {
     if (selectedPlan !== null) {
@@ -74,14 +71,17 @@ export default function PlansPage() {
   return (
     <section className="container mx-auto py-12 my-16">
       {/* Header */}
-      <div className="flex items-center space-x-2 mb-8">
+      <div className="flex items-center gap-4 mb-10">
         <button
           onClick={() => router.back()}
-          className="text-primary hover:text-primary-dark transition-all duration-300"
+          className="w-10 h-10 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 transition-colors"
         >
-          <FaChevronLeft className="text-2xl" />
+          <FaChevronLeft />
         </button>
-        <h1 className="text-3xl font-bold text-gray-800">What protection package do you need?</h1>
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Choose Your Protection</h1>
+          <p className="text-sm text-gray-400 mt-0.5">Select the plan that gives you peace of mind.</p>
+        </div>
       </div>
 
       {/* Plan Cards */}
@@ -89,8 +89,8 @@ export default function PlansPage() {
         {plans.map((plan) => (
           <div
             key={plan.id}
-            className={`bg-white rounded-lg shadow-lg cursor-pointer transition-all duration-300 flex flex-col ${
-              selectedPlan === plan.id ? 'border-2 border-primary' : 'border border-gray-200'
+            className={`bg-white rounded-2xl cursor-pointer transition-all duration-300 flex flex-col shadow-sm hover:shadow-md ${
+              selectedPlan === plan.id ? 'border-2 border-primary ring-4 ring-primary/5' : 'border border-gray-100'
             }`}
             onClick={() => setSelectedPlan(plan.id)}
           >
@@ -143,17 +143,17 @@ export default function PlansPage() {
         <div className="flex space-x-4">
           <button
             onClick={() => setIsBreakdownModalOpen(true)}
-            className="px-6 py-3 text-lg font-semibold text-primary border border-primary rounded-lg hover:bg-primary hover:text-white transition-all duration-300"
+            className="px-6 py-2.5 text-sm font-semibold text-primary border-2 border-primary rounded-lg hover:bg-primary hover:text-white transition-all duration-200"
           >
             View Breakdown
           </button>
           <button
             onClick={handleContinue}
             disabled={selectedPlan === null}
-            className={`px-8 py-3 text-lg font-semibold rounded-lg transition-all duration-300 ${
+            className={`px-8 py-2.5 text-sm font-semibold rounded-lg transition-all duration-200 ${
               selectedPlan === null
-                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                : 'bg-primary text-white hover:bg-primary-dark'
+                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                : 'bg-primary text-white hover:bg-primary/90'
             }`}
           >
             Continue
@@ -223,35 +223,18 @@ export default function PlansPage() {
             </h3>
             <div className="space-y-3">
               <div className="flex justify-between">
-                <span className="text-gray-600">Base Price:</span>
+                <span className="text-gray-600">Rental ({totalDays} days):</span>
                 <span className="font-medium text-gray-800">£{basePrice.toFixed(2)}</span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">VAT (20%):</span>
-                <span className="font-medium text-gray-800">£{vat.toFixed(2)}</span>
-              </div>
-              {hasDiscount && (
-                <>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Value Before Discount:</span>
-                    <span className="font-medium text-gray-800">£{valueBeforeDiscount?.toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Discount (30%):</span>
-                    <span className="font-medium text-green-600">-£{discountAmount?.toFixed(2)}</span>
-                  </div>
-                  <div className="text-sm text-gray-600">*Discount applied for renting 30+ days.</div>
-                </>
-              )}
               {selectedPlanDetails && (
                 <>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Plan Cost:</span>
+                    <span className="text-gray-600">Protection Plan ({selectedPlanDetails.name}):</span>
                     <span className="font-medium text-gray-800">£{planCost.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Plan Cost Per Day:</span>
-                    <span className="font-medium text-gray-800">£{selectedPlanDetails.price.toFixed(2)}</span>
+                    <span className="text-xs text-gray-400">Per day:</span>
+                    <span className="text-xs text-gray-400">£{selectedPlanDetails.price.toFixed(2)}</span>
                   </div>
                 </>
               )}

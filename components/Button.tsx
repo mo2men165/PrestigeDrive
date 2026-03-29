@@ -1,12 +1,14 @@
 import { ReactNode, MouseEvent } from 'react';
+import Link from 'next/link';
 
 interface ButtonProps {
   children: ReactNode;
-  href?: string; // Optional href for link buttons
-  onClick?: (event: MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => void; // Optional onClick handler
-  variant?: 'primary' | 'secondary' | 'gold'; // Button variant
-  className?: string; // Optional custom class names
-  type?: 'button' | 'submit' | 'reset'; // Optional button type (only for button elements)
+  href?: string;
+  onClick?: (event: MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => void;
+  variant?: 'primary' | 'secondary';
+  className?: string;
+  type?: 'button' | 'submit' | 'reset';
+  disabled?: boolean;
 }
 
 const Button = ({
@@ -16,38 +18,36 @@ const Button = ({
   variant = 'primary',
   className = '',
   type = 'button',
+  disabled = false,
 }: ButtonProps) => {
   const baseStyles =
-    'px-4 py-2 rounded-lg text-center transition-all duration-300 ease-in-out hover:no-underline';
+    'inline-flex items-center justify-center px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 ease-in-out cursor-pointer';
 
   const variantStyles =
     variant === 'primary'
-      ? 'bg-primary text-white hover:bg-white hover:text-primary hover:border-primary border border-transparent'
-      : variant === 'secondary'
-      ? 'bg-white text-primary border border-primary hover:bg-primary hover:text-white hover:border-transparent'
-      : variant === 'gold'
-      ? 'bg-yellow-500 text-white hover:bg-yellow-600'
-      : 'bg-gray-600 text-white hover:bg-gray-700';
+      ? 'bg-primary text-white hover:bg-primary/90 border border-transparent'
+      : 'border-2 border-primary text-primary hover:bg-primary hover:text-white';
 
-  // If href is provided, render an anchor tag
+  const disabledStyles = disabled ? 'opacity-50 cursor-not-allowed' : '';
+
   if (href) {
     return (
-      <a
+      <Link
         href={href}
         onClick={onClick as (event: MouseEvent<HTMLAnchorElement>) => void}
         className={`${baseStyles} ${variantStyles} ${className}`}
       >
         {children}
-      </a>
+      </Link>
     );
   }
 
-  // Otherwise, render a button
   return (
     <button
       type={type}
+      disabled={disabled}
       onClick={onClick as (event: MouseEvent<HTMLButtonElement>) => void}
-      className={`${baseStyles} ${variantStyles} ${className}`}
+      className={`${baseStyles} ${variantStyles} ${disabledStyles} ${className}`}
     >
       {children}
     </button>

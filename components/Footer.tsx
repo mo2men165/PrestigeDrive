@@ -2,31 +2,32 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { contactInfo, quickLinks, services, socialMedia } from '@/constants';
-import { logo } from '@/public/assets';
+import { logoSquare } from '@/public/assets';
+import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
 
 const Footer = () => {
   return (
-    <footer className="bg-white text-primary py-12">
-      <div className="container mx-auto px-4 ">
-        <div className="mb-8 flex flex-col justify-center items-center">
-            <Image src={logo} alt="MyEasyDrive" width={200} height={100} />
+    <footer className="bg-gray-50 border-t border-gray-200 text-gray-600">
+      <div className="container mx-auto px-4 pt-16 pb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
 
-          <p className="mt-4 text-primary">
-            Your trusted partner for luxury car rentals.
-          </p>
-        </div>
+          {/* Brand */}
+          <div>
+            <Image src={logoSquare} alt="EliteDrive4U" width={100} height={100} className="mb-4" />
+            <p className="text-gray-500 text-sm leading-relaxed">
+              Your trusted partner for premium car rentals and professional chauffeur services across the UK &amp; Ireland.
+            </p>
+          </div>
 
-        {/* Footer Links */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-8">
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-bold mb-4">Quick Links</h3>
-            <ul className="space-y-2">
+            <h3 className="text-gray-900 text-sm font-semibold uppercase tracking-wider mb-5">Quick Links</h3>
+            <ul className="space-y-3">
               {quickLinks.map((link, index) => (
                 <li key={index}>
                   <Link
                     href={link.href}
-                    className="text-primary hover:text-secondary transition-colors"
+                    className="text-gray-500 hover:text-primary text-sm transition-colors duration-200"
                   >
                     {link.name}
                   </Link>
@@ -37,13 +38,13 @@ const Footer = () => {
 
           {/* Services */}
           <div>
-            <h3 className="text-lg font-bold mb-4">Services</h3>
-            <ul className="space-y-2">
+            <h3 className="text-gray-900 text-sm font-semibold uppercase tracking-wider mb-5">Services</h3>
+            <ul className="space-y-3">
               {services.map((service, index) => (
                 <li key={index}>
                   <Link
-                    href={`/services`}
-                    className="text-primary hover:text-secondary transition-colors"
+                    href="/services"
+                    className="text-gray-500 hover:text-primary text-sm transition-colors duration-200"
                   >
                     {service.name}
                   </Link>
@@ -52,44 +53,48 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Contact Info */}
+          {/* Contact */}
           <div>
-            <h3 className="text-lg font-bold mb-4">Contact Info</h3>
-            <ul className="space-y-2 text-primary">
-              {contactInfo.map((info, index) => (
-                <li key={index}>
-                  <strong>{info.label}:</strong> {info.value}
-                </li>
-              ))}
+            <h3 className="text-gray-900 text-sm font-semibold uppercase tracking-wider mb-5">Contact</h3>
+            <ul className="space-y-4">
+              <li className="flex items-start gap-3">
+                <FaMapMarkerAlt className="text-secondary mt-1 shrink-0" />
+                <span className="text-gray-500 text-sm">Citibase Brighton, 95 Ditchling Rd, Brighton and Hove, Brighton BN1 4ST</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <FaPhoneAlt className="text-secondary shrink-0" />
+                <a href="tel:03333391475" className="text-gray-500 hover:text-primary text-sm transition-colors">03333391475</a>
+              </li>
+              <li className="flex items-center gap-3">
+                <FaEnvelope className="text-secondary shrink-0" />
+                <a href="mailto:info@elitedrive4u.co.uk" className="text-gray-500 hover:text-primary text-sm transition-colors">info@elitedrive4u.co.uk</a>
+              </li>
             </ul>
-          </div>
 
-          {/* Social Media */}
-          <div>
-            <h3 className="text-lg font-bold mb-4">Follow Us</h3>
-            <div className="flex space-x-4">
-              {socialMedia.map((social, index) => {
-                const Icon = social.icon;
-                return (
-                  <Link
-                    key={index}
-                    href={social.href}
-                    className="text-primary hover:text-secondary transition-colors"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Icon size={24} />
-                  </Link>
-                );
-              })}
-            </div>
+            {socialMedia.length > 0 && (
+              <div className="flex gap-3 mt-6">
+                {socialMedia.map((social, index) => {
+                  const Icon = social.icon;
+                  return (
+                    <Link
+                      key={index}
+                      href={social.href}
+                      className="w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 hover:bg-primary hover:text-white transition-all duration-200"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Icon size={16} />
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Copyright Notice */}
-        <div className="text-center border-t border-gray-800 pt-6">
-          <p className="text-primary">
-            &copy; {new Date().getFullYear()} MyEasyDrive. All Rights Reserved.
+        <div className="border-t border-gray-200 pt-8 text-center">
+          <p className="text-gray-400 text-sm">
+            &copy; {new Date().getFullYear()} EliteDrive4U. All Rights Reserved.
           </p>
         </div>
       </div>

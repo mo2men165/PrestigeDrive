@@ -1,4 +1,7 @@
-import logo from '../../public/assets/myeasydrive-high-resolution-logo-transparent.png';
+import logo from '../../public/assets/newlogonobg.png';
+import logoWide from '../../public/assets/newlogonobg.png';
+import logoSquare from '../../public/assets/newlogonobg.png';
+import logoTall from '../../public/assets/newlogonobg.png';
 import family from '../../public/assets/familyy.jpg';
 import weekend from '../../public/assets/weekend.jpg';
 import longterm from '../../public/assets/longterm.webp';
@@ -32,6 +35,9 @@ import rac from '../../public/assets/rac.png'
 
 export { 
     logo,
+    logoWide,
+    logoSquare,
+    logoTall,
     family,
     weekend,
     longterm,
