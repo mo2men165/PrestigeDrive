@@ -15,7 +15,7 @@ const Footer = () => {
           <div>
             <Image src={logoSquare} alt="EliteDrive4U" width={100} height={100} className="mb-4" />
             <p className="text-gray-500 text-sm leading-relaxed">
-              Your trusted partner for premium car rentals and professional chauffeur services across the UK &amp; Ireland.
+              Your trusted partner for premium car rentals and professional chauffeur services across Sussex.
             </p>
           </div>
 
