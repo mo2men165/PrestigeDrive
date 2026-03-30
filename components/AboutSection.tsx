@@ -91,7 +91,7 @@ const AboutSection = () => {
           <div className="w-16 h-1 bg-secondary rounded-full mb-8" />
 
           <p className="text-lg text-gray-600 leading-relaxed mb-5">
-            Based in Brighton and serving the UK and Ireland, <strong className="text-gray-800">EliteDrive4U</strong> makes premium motoring accessible to everyone. We combine a handpicked fleet of luxury vehicles with white-glove service — all at prices that won&apos;t break the bank.
+            Based in Brighton and serving Sussex, <strong className="text-gray-800">EliteDrive4U</strong> makes premium motoring accessible to everyone. We combine a handpicked fleet of luxury vehicles with white-glove service — all at prices that won&apos;t break the bank.
           </p>
           <p className="text-lg text-gray-600 leading-relaxed mb-8">
             What sets us apart is our <strong className="text-gray-800">bespoke chauffeur service</strong> — request a professional driver to accompany your rental for the ultimate in comfort and convenience. Every journey with us is designed to be as memorable as your destination.
