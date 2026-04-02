@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { contactInfo, quickLinks, services, socialMedia } from '@/constants';
+import { BOOKING_EMAIL, INFO_EMAIL, quickLinks, services, socialMedia } from '@/constants';
 import { logoSquare } from '@/public/assets';
 import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
 
@@ -67,7 +67,11 @@ const Footer = () => {
               </li>
               <li className="flex items-center gap-3">
                 <FaEnvelope className="text-secondary shrink-0" />
-                <a href="mailto:info@elitedrive4u.co.uk" className="text-gray-500 hover:text-primary text-sm transition-colors">info@elitedrive4u.co.uk</a>
+                <a href={`mailto:${INFO_EMAIL}`} className="text-gray-500 hover:text-primary text-sm transition-colors">{INFO_EMAIL}</a>
+              </li>
+              <li className="flex items-center gap-3">
+                <FaEnvelope className="text-secondary shrink-0" />
+                <a href={`mailto:${BOOKING_EMAIL}`} className="text-gray-500 hover:text-primary text-sm transition-colors">{BOOKING_EMAIL}</a>
               </li>
             </ul>
 

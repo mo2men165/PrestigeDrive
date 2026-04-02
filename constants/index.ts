@@ -1,3 +1,4 @@
+import { BOOKING_EMAIL, INFO_EMAIL } from './emails';
 import { allianz, electric, family, longterm, luxury, suv, weekend, blog1, blog2, blog3, blackrock, closebrothers, rac, blog4, blog5 } from "@/public/assets";
 import { FaShieldAlt, FaFacebook, FaHandsHelping, FaRocket } from 'react-icons/fa';
 import { GiProgression } from "react-icons/gi";
@@ -69,37 +70,37 @@ import { GiProgression } from "react-icons/gi";
       id: 1,
       quote: "Renting a car was seamless and the service was excellent. Highly recommend!",
       name: "John Mcintyre",
-      date: "2023-10-01",
+      date: "2026-03-15",
     },
     {
       id: 2,
       quote: "The car was in perfect condition and the pickup process was quick and easy.",
       name: "Jane Smith",
-      date: "2023-09-25",
+      date: "2026-02-08",
     },
     {
       id: 3,
       quote: "Great prices and friendly staff. Will definitely rent from them again!",
       name: "Alice Johnson",
-      date: "2023-09-20",
+      date: "2026-01-12",
     },
     {
       id: 4,
       quote: "Smooth booking process and the car was exactly as described.",
       name: "Bob Brown",
-      date: "2023-09-15",
+      date: "2025-11-20",
     },
     {
       id: 5,
       quote: "Amazing experience! The car was clean and the staff was very helpful.",
       name: "Charlie Davis",
-      date: "2023-09-10",
+      date: "2025-09-03",
     },
     {
       id: 6,
       quote: "Best car rental service I've ever used. Highly satisfied!",
       name: "Eve White",
-      date: "2023-09-05",
+      date: "2025-06-17",
     },
   ];
 
@@ -117,10 +118,13 @@ import { GiProgression } from "react-icons/gi";
     { name: 'Corporate Rentals', href: '/services/corporate' },
   ];
   
+  export { BOOKING_EMAIL, INFO_EMAIL };
+
   export const contactInfo = [
     { label: 'Address', value: 'Citibase Brighton, 95 Ditchling Rd, Brighton and Hove, Brighton BN1 4ST' },
     { label: 'Phone', value: '03333391475' },
-    { label: 'Email', value: 'info@elitedrive4u.co.uk' },
+    { label: 'Email', value: INFO_EMAIL },
+    { label: 'Bookings', value: BOOKING_EMAIL },
   ];
   
   export const socialMedia = [

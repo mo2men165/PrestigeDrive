@@ -189,6 +189,7 @@ const SearchBar = () => {
                     className="w-full p-2.5 border border-gray-200 rounded-lg pl-9 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition"
                     dateFormat="dd/MM/yyyy"
                     placeholderText="Pickup date"
+                    minDate={new Date()}
                   />
                   <FaCalendar className="absolute left-3 top-3.5 text-gray-400 text-xs" />
                 </div>
@@ -258,7 +259,7 @@ const SearchBar = () => {
                     className="w-full p-2.5 border border-gray-200 rounded-lg pl-9 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition"
                     dateFormat="dd/MM/yyyy"
                     placeholderText="Dropoff date"
-                    minDate={rentalData.pickupDate ? new Date(rentalData.pickupDate) : undefined}
+                    minDate={rentalData.pickupDate ? new Date(rentalData.pickupDate) : new Date()}
                   />
                   <FaCalendar className="absolute left-3 top-3.5 text-gray-400 text-xs" />
                 </div>

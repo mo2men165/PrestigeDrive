@@ -1,8 +1,9 @@
 import { Resend } from 'resend';
 import { NextResponse } from 'next/server';
+import { BOOKING_EMAIL, INFO_EMAIL } from '@/constants/emails';
 
-const COMPANY_EMAIL = 'booking@elitedrive4u.co.uk';
-const FROM_EMAIL = 'booking@elitedrive4u.co.uk';
+const COMPANY_NOTIFICATION_TO = [INFO_EMAIL, BOOKING_EMAIL];
+const FROM_EMAIL = BOOKING_EMAIL;
 
 function getResend() {
   return new Resend(process.env.NEXT_PUBLIC_RESEND_API_KEY);
@@ -10,6 +11,7 @@ function getResend() {
 
 interface BookingEmailData {
   bookingRef: string;
+  bookingType?: string;
   name: string;
   email: string;
   phone: string;
@@ -73,6 +75,15 @@ function buildCustomerEmailHtml(data: BookingEmailData): string {
                   </td>
                 </tr>
               </table>
+            </td>
+          </tr>
+
+          <!-- Booking Type -->
+          <tr>
+            <td align="center" style="padding:0 40px 16px;">
+              <span style="display:inline-block;background-color:${data.bookingType === 'chauffeur' ? '#fdf4ff' : '#f0fdf4'};color:${data.bookingType === 'chauffeur' ? '#9333ea' : '#16a34a'};font-size:12px;font-weight:600;padding:6px 16px;border-radius:20px;border:1px solid ${data.bookingType === 'chauffeur' ? '#e9d5ff' : '#d1fae5'};text-transform:uppercase;letter-spacing:1px;">
+                ${data.bookingType === 'chauffeur' ? 'Chauffeur Service' : 'Standard Booking'}
+              </span>
             </td>
           </tr>
 
@@ -167,7 +178,7 @@ function buildCustomerEmailHtml(data: BookingEmailData): string {
               <p style="margin:0;">
                 <a href="tel:03333391475" style="color:#0E253F;font-size:13px;font-weight:600;text-decoration:none;">03333 391 475</a>
                 <span style="color:#d1d5db;margin:0 8px;">|</span>
-                <a href="mailto:booking@elitedrive4u.co.uk" style="color:#0E253F;font-size:13px;font-weight:600;text-decoration:none;">booking@elitedrive4u.co.uk</a>
+                <a href="mailto:${BOOKING_EMAIL}" style="color:#0E253F;font-size:13px;font-weight:600;text-decoration:none;">${BOOKING_EMAIL}</a>
               </p>
               <p style="color:#9ca3af;font-size:11px;margin:16px 0 0;">&copy; ${new Date().getFullYear()} EliteDrive4U. All rights reserved.</p>
             </td>
@@ -210,7 +221,7 @@ function buildCompanyEmailHtml(data: BookingEmailData): string {
               <table width="100%" cellpadding="0" cellspacing="0">
                 <tr><td style="color:#6b7280;font-size:13px;padding:3px 0;width:120px;">Name</td><td style="color:#1a1a1a;font-size:13px;font-weight:500;padding:3px 0;">${data.name}</td></tr>
                 <tr><td style="color:#6b7280;font-size:13px;padding:3px 0;">Email</td><td style="color:#1a1a1a;font-size:13px;font-weight:500;padding:3px 0;"><a href="mailto:${data.email}" style="color:#0E253F;text-decoration:none;">${data.email}</a></td></tr>
-                <tr><td style="color:#6b7280;font-size:13px;padding:3px 0;">Phone</td><td style="color:#1a1a1a;font-size:13px;font-weight:500;padding:3px 0;"><a href="tel:${data.phone}" style="color:#0E253F;text-decoration:none;">${data.phone}</a></td></tr>
+                <tr><td style="color:#6b7280;font-size:13px;padding:3px 0;">Phone</td><td style="color:#1a1a1a;font-size:13px;font-weight:500;padding:3px 0;">${data.phone}</td></tr>
               </table>
             </td>
           </tr>
@@ -222,7 +233,8 @@ function buildCompanyEmailHtml(data: BookingEmailData): string {
             <td style="padding:16px 40px;">
               <p style="color:#9ca3af;font-size:11px;margin:0 0 8px;text-transform:uppercase;letter-spacing:1px;">Booking Details</p>
               <table width="100%" cellpadding="0" cellspacing="0">
-                <tr><td style="color:#6b7280;font-size:13px;padding:3px 0;width:120px;">Vehicle</td><td style="color:#1a1a1a;font-size:13px;font-weight:600;padding:3px 0;">${data.carTitle}</td></tr>
+                <tr><td style="color:#6b7280;font-size:13px;padding:3px 0;width:120px;">Booking Type</td><td style="color:#1a1a1a;font-size:13px;font-weight:600;padding:3px 0;"><span style="display:inline-block;background-color:${data.bookingType === 'chauffeur' ? '#fdf4ff' : '#f0fdf4'};color:${data.bookingType === 'chauffeur' ? '#9333ea' : '#16a34a'};font-size:11px;font-weight:600;padding:2px 10px;border-radius:10px;">${data.bookingType === 'chauffeur' ? 'Chauffeur' : 'Standard'}</span></td></tr>
+                <tr><td style="color:#6b7280;font-size:13px;padding:3px 0;">Vehicle</td><td style="color:#1a1a1a;font-size:13px;font-weight:600;padding:3px 0;">${data.carTitle}</td></tr>
                 <tr><td style="color:#6b7280;font-size:13px;padding:3px 0;">Duration</td><td style="color:#1a1a1a;font-size:13px;font-weight:500;padding:3px 0;">${data.totalDays} days</td></tr>
                 <tr><td style="color:#6b7280;font-size:13px;padding:3px 0;">Pickup</td><td style="color:#1a1a1a;font-size:13px;font-weight:500;padding:3px 0;">${data.pickupLocation} — ${data.pickupDate} at ${data.pickupTime}</td></tr>
                 <tr><td style="color:#6b7280;font-size:13px;padding:3px 0;">Drop-off</td><td style="color:#1a1a1a;font-size:13px;font-weight:500;padding:3px 0;">${data.dropoffLocation} — ${data.dropoffDate} at ${data.dropoffTime}</td></tr>
@@ -278,7 +290,7 @@ export async function POST(request: Request) {
       }),
       resend.emails.send({
         from: `EliteDrive4U Bookings <${FROM_EMAIL}>`,
-        to: COMPANY_EMAIL,
+        to: COMPANY_NOTIFICATION_TO,
         subject: `New Booking: ${data.carTitle} — ${data.bookingRef}`,
         html: buildCompanyEmailHtml(data),
       }),

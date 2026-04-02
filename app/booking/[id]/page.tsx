@@ -5,8 +5,10 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import Modal from 'react-modal';
-import { FaMapMarkerAlt } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaCalendar } from 'react-icons/fa';
 import { useSearchParams } from "next/navigation";
 import { useRentalData } from '@/contexts/RentalContext';
 import GlobalLoader from '@/components/GlobalLoader';
@@ -21,7 +23,9 @@ const BookingSchema = Yup.object().shape({
   dob: Yup.date()
     .max(new Date(), 'Date of birth cannot be in the future')
     .required('Date of birth is required'),
-  pickupDate: Yup.date().required('Pickup date is required'),
+  pickupDate: Yup.date()
+    .min(new Date(new Date().setHours(0, 0, 0, 0)), 'Pickup date cannot be in the past')
+    .required('Pickup date is required'),
   dropoffDate: Yup.date()
     .min(Yup.ref('pickupDate'), 'Dropoff date must be after pickup date')
     .required('Dropoff date is required'),
@@ -284,16 +288,17 @@ export default function BookingPage() {
                       <label htmlFor="pickupDate" className="block text-sm font-medium text-gray-700">
                         Pickup Date <span className="text-red-500">*</span>
                       </label>
-                      <Field
-                        type="date"
-                        id="pickupDate"
-                        name="pickupDate"
-                        className="w-full p-2 border rounded-lg"
-                        value={values.pickupDate ? new Date(values.pickupDate).toISOString().split('T')[0] : ''}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          setFieldValue("pickupDate", e.target.value ? new Date(e.target.value) : null);
-                        }}
-                      />
+                      <div className="relative">
+                        <DatePicker
+                          selected={values.pickupDate ? new Date(values.pickupDate) : null}
+                          onChange={(date) => setFieldValue('pickupDate', date)}
+                          className="w-full p-2 border rounded-lg pl-9 text-sm"
+                          dateFormat="dd/MM/yyyy"
+                          placeholderText="dd/mm/yyyy"
+                          minDate={new Date()}
+                        />
+                        <FaCalendar className="absolute left-3 top-3 text-gray-400 text-xs" />
+                      </div>
                       <ErrorMessage
                         name="pickupDate"
                         component="div"
@@ -354,16 +359,17 @@ export default function BookingPage() {
                       <label htmlFor="dropoffDate" className="block text-sm font-medium text-gray-700">
                         Dropoff Date <span className="text-red-500">*</span>
                       </label>
-                      <Field
-                        type="date"
-                        id="dropoffDate"
-                        name="dropoffDate"
-                        className="w-full p-2 border rounded-lg"
-                        value={values.dropoffDate ? new Date(values.dropoffDate).toISOString().split('T')[0] : ''}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          setFieldValue("dropoffDate", e.target.value ? new Date(e.target.value) : null);
-                        }}
-                      />
+                      <div className="relative">
+                        <DatePicker
+                          selected={values.dropoffDate ? new Date(values.dropoffDate) : null}
+                          onChange={(date) => setFieldValue('dropoffDate', date)}
+                          className="w-full p-2 border rounded-lg pl-9 text-sm"
+                          dateFormat="dd/MM/yyyy"
+                          placeholderText="dd/mm/yyyy"
+                          minDate={values.pickupDate ? new Date(values.pickupDate) : new Date()}
+                        />
+                        <FaCalendar className="absolute left-3 top-3 text-gray-400 text-xs" />
+                      </div>
                       <ErrorMessage
                         name="dropoffDate"
                         component="div"
@@ -455,7 +461,7 @@ export default function BookingPage() {
                       <div className="flex justify-between">
                         <span className="text-gray-600">Pickup Date:</span>
                         <span className="font-medium text-gray-800">
-                          {new Date(modalValues.pickupDate).toLocaleDateString()}
+                          {new Date(modalValues.pickupDate).toLocaleDateString('en-GB')}
                         </span>
                       </div>
                       <div className="flex justify-between">
@@ -467,7 +473,7 @@ export default function BookingPage() {
                       <div className="flex justify-between">
                         <span className="text-gray-600">Dropoff Date:</span>
                         <span className="font-medium text-gray-800">
-                          {new Date(modalValues.dropoffDate).toLocaleDateString()}
+                          {new Date(modalValues.dropoffDate).toLocaleDateString('en-GB')}
                         </span>
                       </div>
                       <div className="flex justify-between">

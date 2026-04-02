@@ -42,6 +42,23 @@ useEffect(() => {
 
 
 
+const formatDateGB = (date: any) => {
+  if (!date) return '';
+  const d = new Date(date);
+  if (isNaN(d.getTime())) return String(date);
+  return d.toLocaleDateString('en-GB');
+};
+
+const formatTimeTo12h = (timeStr: string) => {
+  if (!timeStr) return '';
+  const [hours, minutes] = timeStr.split(':');
+  const h = parseInt(hours, 10);
+  if (isNaN(h)) return timeStr;
+  const period = h >= 12 ? 'PM' : 'AM';
+  const display = h === 0 ? 12 : h > 12 ? h - 12 : h;
+  return `${display}:${minutes} ${period}`;
+};
+
 const handleReserveNow = async () => {
   setLoading(true);
 
@@ -64,8 +81,14 @@ const handleReserveNow = async () => {
     bookingRef,
   });
 
+  const formattedPickupDate = formatDateGB(rentalData.pickupDate);
+  const formattedDropoffDate = formatDateGB(rentalData.dropoffDate);
+  const formattedPickupTime = formatTimeTo12h(rentalData.pickupTime || "");
+  const formattedDropoffTime = formatTimeTo12h(rentalData.dropoffTime || "");
+
   const bookingData = {
     bookingRef,
+    bookingType: 'standard',
     name: rentalData.name || "",
     email: rentalData.email || "",
     phone: rentalData.phone || "",
@@ -73,11 +96,11 @@ const handleReserveNow = async () => {
     selectedPlan: rentalData.selectedPlan?.name || "",
     selectedPlanPrice: rentalData.selectedPlan?.price || 0,
     pickupLocation: rentalData.pickupLocation || "",
-    pickupDate: rentalData.pickupDate || "",
-    pickupTime: rentalData.pickupTime || "",
+    pickupDate: formattedPickupDate,
+    pickupTime: formattedPickupTime,
     dropoffLocation: rentalData.dropoffLocation || "",
-    dropoffDate: rentalData.dropoffDate || "",
-    dropoffTime: rentalData.dropoffTime || "",
+    dropoffDate: formattedDropoffDate,
+    dropoffTime: formattedDropoffTime,
     totalDays: rentalData.totalDays || 0,
     basePrice: rentalData.basePrice || 0,
     planCost: (rentalData.selectedPlan?.price || 0) * (rentalData.totalDays || 0),
@@ -95,8 +118,6 @@ const handleReserveNow = async () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         ...bookingData,
-        pickupDate: rentalData.pickupDate ? new Date(rentalData.pickupDate).toLocaleDateString('en-GB') : "",
-        dropoffDate: rentalData.dropoffDate ? new Date(rentalData.dropoffDate).toLocaleDateString('en-GB') : "",
         basePrice: rentalData.basePrice?.toFixed(2) || "0.00",
         planCost: ((rentalData.selectedPlan?.price || 0) * (rentalData.totalDays || 0)).toFixed(2),
         planCostPerDay: rentalData.selectedPlan?.price?.toFixed(2) || "0.00",

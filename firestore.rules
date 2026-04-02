@@ -32,6 +32,16 @@ service cloud.firestore {
       allow update, delete: if true;
     }
 
+    match /pricing/{docId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /adminSettings/{docId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
     match /{document=**} {
       allow read: if true;
       allow write: if false;

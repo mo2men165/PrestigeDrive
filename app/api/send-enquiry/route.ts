@@ -1,11 +1,20 @@
 import { Resend } from 'resend';
 import { NextResponse } from 'next/server';
+import { BOOKING_EMAIL, INFO_EMAIL } from '@/constants/emails';
 
-const COMPANY_EMAIL = 'booking@elitedrive4u.co.uk';
-const FROM_EMAIL = 'booking@elitedrive4u.co.uk';
+const COMPANY_NOTIFICATION_TO = [INFO_EMAIL, BOOKING_EMAIL];
+const FROM_EMAIL = BOOKING_EMAIL;
 
 function getResend() {
   return new Resend(process.env.NEXT_PUBLIC_RESEND_API_KEY);
+}
+
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 }
 
 interface EnquiryData {
@@ -14,12 +23,21 @@ interface EnquiryData {
   phone?: string;
   query?: string;
   service?: string;
+  bookingType?: string;
+  bookingRef?: string;
   pickupLocation?: string;
   pickupDate?: string;
   pickupTime?: string;
   dropoffLocation?: string;
   dropoffDate?: string;
   dropoffTime?: string;
+  additionalNotes?: string;
+  totalDays?: number;
+  pricePerDay?: number;
+  totalPrice?: number;
+  currency?: string;
+  pricingNotes?: string;
+  pricingSource?: string;
 }
 
 function buildCustomerEnquiryHtml(data: EnquiryData): string {
@@ -52,6 +70,34 @@ function buildCustomerEnquiryHtml(data: EnquiryData): string {
               </p>
             </td>
           </tr>
+          ${isServiceBooking && data.bookingRef ? `
+          <tr>
+            <td style="padding:0 40px 16px;">
+              <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f0f4ff;border-radius:8px;border:1px solid #dbeafe;">
+                <tr>
+                  <td style="padding:16px 20px;text-align:center;">
+                    <p style="color:#6b7280;font-size:12px;margin:0;text-transform:uppercase;letter-spacing:1px;">Booking Reference</p>
+                    <p style="color:#0E253F;font-size:20px;font-weight:bold;margin:6px 0 0;font-family:monospace;letter-spacing:1px;">${data.bookingRef}</p>
+                    ${data.bookingType ? `<p style="margin:8px 0 0;"><span style="display:inline-block;background-color:${data.bookingType === 'chauffeur' ? '#fdf4ff' : '#f0fdf4'};color:${data.bookingType === 'chauffeur' ? '#9333ea' : '#16a34a'};font-size:11px;font-weight:600;padding:4px 12px;border-radius:12px;text-transform:uppercase;letter-spacing:1px;">${data.bookingType === 'chauffeur' ? 'Chauffeur Service' : 'Service Booking'}</span></p>` : ''}
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>` : ''}
+          ${isServiceBooking && data.totalPrice != null && data.pricePerDay != null && data.totalDays != null ? `
+          <tr>
+            <td style="padding:0 40px 16px;">
+              <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#fafafa;border-radius:8px;border:1px solid #e5e7eb;">
+                <tr>
+                  <td style="padding:14px 20px;">
+                    <p style="color:#9ca3af;font-size:11px;margin:0;text-transform:uppercase;letter-spacing:1px;">Guide price</p>
+                    <p style="color:#1a1a1a;font-size:15px;font-weight:600;margin:6px 0 0;">£${Number(data.totalPrice).toFixed(2)}</p>
+                    <p style="color:#6b7280;font-size:12px;margin:4px 0 0;line-height:1.5;">${data.totalDays} day${data.totalDays !== 1 ? 's' : ''} × £${Number(data.pricePerDay).toFixed(2)} per day. Final price confirmed by our team.</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>` : ''}
           <tr>
             <td style="padding:0 40px 32px;text-align:center;">
               <p style="color:#6b7280;font-size:13px;margin:0 0 4px;">Need immediate assistance?</p>
@@ -76,9 +122,18 @@ function buildCompanyEnquiryHtml(data: EnquiryData): string {
 
   const detailsRows = isServiceBooking
     ? `
-      <tr><td style="color:#6b7280;font-size:13px;padding:3px 0;width:120px;">Service</td><td style="color:#1a1a1a;font-size:13px;font-weight:500;padding:3px 0;">${data.service}</td></tr>
+      <tr><td style="color:#6b7280;font-size:13px;padding:3px 0;width:120px;">Booking Type</td><td style="color:#1a1a1a;font-size:13px;font-weight:600;padding:3px 0;"><span style="display:inline-block;background-color:${data.bookingType === 'chauffeur' ? '#fdf4ff' : '#f0fdf4'};color:${data.bookingType === 'chauffeur' ? '#9333ea' : '#16a34a'};font-size:11px;font-weight:600;padding:2px 10px;border-radius:10px;">${data.bookingType === 'chauffeur' ? 'Chauffeur' : 'Service'}</span></td></tr>
+      <tr><td style="color:#6b7280;font-size:13px;padding:3px 0;">Service</td><td style="color:#1a1a1a;font-size:13px;font-weight:500;padding:3px 0;">${data.service}</td></tr>
       <tr><td style="color:#6b7280;font-size:13px;padding:3px 0;">Pickup</td><td style="color:#1a1a1a;font-size:13px;font-weight:500;padding:3px 0;">${data.pickupLocation} — ${data.pickupDate} at ${data.pickupTime}</td></tr>
       <tr><td style="color:#6b7280;font-size:13px;padding:3px 0;">Drop-off</td><td style="color:#1a1a1a;font-size:13px;font-weight:500;padding:3px 0;">${data.dropoffLocation} — ${data.dropoffDate} at ${data.dropoffTime}</td></tr>
+      ${data.totalDays != null && data.pricePerDay != null && data.totalPrice != null ? `
+      <tr><td style="color:#6b7280;font-size:13px;padding:3px 0;">Rental days</td><td style="color:#1a1a1a;font-size:13px;font-weight:500;padding:3px 0;">${data.totalDays}</td></tr>
+      <tr><td style="color:#6b7280;font-size:13px;padding:3px 0;">Price per day (£)</td><td style="color:#1a1a1a;font-size:13px;font-weight:500;padding:3px 0;">£${Number(data.pricePerDay).toFixed(2)} ${data.currency && data.currency !== 'GBP' ? `(${data.currency})` : ''}</td></tr>
+      <tr><td style="color:#6b7280;font-size:13px;padding:3px 0;">Guide total</td><td style="color:#1a1a1a;font-size:13px;font-weight:700;padding:3px 0;">£${Number(data.totalPrice).toFixed(2)}</td></tr>
+      ` : ''}
+      ${data.pricingSource ? `<tr><td style="color:#6b7280;font-size:13px;padding:3px 0;">Price source</td><td style="color:#1a1a1a;font-size:13px;font-weight:500;padding:3px 0;">${data.pricingSource === 'legacy' ? 'Legacy admin settings' : 'Pricing collection'}</td></tr>` : ''}
+      ${data.pricingNotes ? `<tr><td style="color:#6b7280;font-size:13px;padding:8px 0 3px;vertical-align:top;">Pricing notes</td><td style="color:#1a1a1a;font-size:13px;font-weight:500;padding:8px 0 3px;line-height:1.5;">${escapeHtml(data.pricingNotes)}</td></tr>` : ''}
+      ${data.additionalNotes ? `<tr><td style="color:#6b7280;font-size:13px;padding:8px 0 3px;vertical-align:top;">Customer notes</td><td style="color:#1a1a1a;font-size:13px;font-weight:500;padding:8px 0 3px;line-height:1.5;">${escapeHtml(data.additionalNotes)}</td></tr>` : ''}
     `
     : `
       <tr><td style="color:#6b7280;font-size:13px;padding:3px 0;width:120px;">Message</td><td style="color:#1a1a1a;font-size:13px;font-weight:500;padding:3px 0;">${data.query}</td></tr>
@@ -96,6 +151,7 @@ function buildCompanyEnquiryHtml(data: EnquiryData): string {
           <tr>
             <td style="background:#0E253F;padding:24px 40px;">
               <h1 style="color:#ffffff;font-size:18px;margin:0;">${isServiceBooking ? 'New Service Booking' : 'New Enquiry'}</h1>
+              ${data.bookingRef ? `<p style="color:#A88B5C;font-size:13px;margin:4px 0 0;">Ref: ${data.bookingRef}</p>` : ''}
             </td>
           </tr>
           <tr>
@@ -104,7 +160,7 @@ function buildCompanyEnquiryHtml(data: EnquiryData): string {
               <table width="100%" cellpadding="0" cellspacing="0">
                 <tr><td style="color:#6b7280;font-size:13px;padding:3px 0;width:120px;">Name</td><td style="color:#1a1a1a;font-size:13px;font-weight:500;padding:3px 0;">${data.name}</td></tr>
                 <tr><td style="color:#6b7280;font-size:13px;padding:3px 0;">Email</td><td style="color:#1a1a1a;font-size:13px;font-weight:500;padding:3px 0;"><a href="mailto:${data.email}" style="color:#0E253F;text-decoration:none;">${data.email}</a></td></tr>
-                ${data.phone ? `<tr><td style="color:#6b7280;font-size:13px;padding:3px 0;">Phone</td><td style="color:#1a1a1a;font-size:13px;font-weight:500;padding:3px 0;"><a href="tel:${data.phone}" style="color:#0E253F;text-decoration:none;">${data.phone}</a></td></tr>` : ''}
+                ${data.phone ? `<tr><td style="color:#6b7280;font-size:13px;padding:3px 0;">Phone</td><td style="color:#1a1a1a;font-size:13px;font-weight:500;padding:3px 0;">${data.phone}</td></tr>` : ''}
               </table>
             </td>
           </tr>
@@ -148,7 +204,7 @@ export async function POST(request: Request) {
       }),
       resend.emails.send({
         from: `EliteDrive4U <${FROM_EMAIL}>`,
-        to: COMPANY_EMAIL,
+        to: COMPANY_NOTIFICATION_TO,
         subject: isServiceBooking
           ? `New Service Booking: ${data.service} — ${data.name}`
           : `New Enquiry from ${data.name}`,

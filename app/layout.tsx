@@ -8,6 +8,7 @@ import { Suspense } from 'react';
 import { RentalProvider } from './../contexts/RentalContext';
 import GlobalLoader from '@/components/GlobalLoader';
 import type { Metadata } from 'next';
+import { BOOKING_EMAIL, INFO_EMAIL } from '@/constants/emails';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -107,7 +108,7 @@ const jsonLd = {
     'Premium car rentals and professional chauffeur services across the UK & Ireland.',
   url: SITE_URL,
   telephone: '03333391475',
-  email: 'info@elitedrive4u.co.uk',
+  email: [INFO_EMAIL, BOOKING_EMAIL],
   address: {
     '@type': 'PostalAddress',
     streetAddress: 'Citibase Brighton, 95 Ditchling Rd',

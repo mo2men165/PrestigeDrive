@@ -1,5 +1,6 @@
 'use client';
 
+import { BOOKING_EMAIL, INFO_EMAIL } from '@/constants';
 import { FaEnvelope, FaPhoneAlt, FaMapMarkerAlt, FaFacebook } from 'react-icons/fa';
 
 export default function Contact() {
@@ -30,8 +31,20 @@ export default function Contact() {
               </div>
               <div>
                 <p className="text-xs font-medium text-gray-400 uppercase tracking-wider">Email</p>
-                <a href="mailto:info@elitedrive4u.co.uk" className="text-gray-900 font-medium text-sm hover:text-primary transition-colors">
-                  info@elitedrive4u.co.uk
+                <a href={`mailto:${INFO_EMAIL}`} className="text-gray-900 font-medium text-sm hover:text-primary transition-colors">
+                  {INFO_EMAIL}
+                </a>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4">
+              <div className="w-10 h-10 rounded-xl bg-primary/5 flex items-center justify-center shrink-0">
+                <FaEnvelope className="text-primary text-sm" />
+              </div>
+              <div>
+                <p className="text-xs font-medium text-gray-400 uppercase tracking-wider">Bookings</p>
+                <a href={`mailto:${BOOKING_EMAIL}`} className="text-gray-900 font-medium text-sm hover:text-primary transition-colors">
+                  {BOOKING_EMAIL}
                 </a>
               </div>
             </div>
