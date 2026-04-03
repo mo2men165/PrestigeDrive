@@ -33,11 +33,6 @@ interface EnquiryData {
   dropoffTime?: string;
   additionalNotes?: string;
   totalDays?: number;
-  pricePerDay?: number;
-  totalPrice?: number;
-  currency?: string;
-  pricingNotes?: string;
-  pricingSource?: string;
 }
 
 function buildCustomerEnquiryHtml(data: EnquiryData): string {
@@ -84,18 +79,10 @@ function buildCustomerEnquiryHtml(data: EnquiryData): string {
               </table>
             </td>
           </tr>` : ''}
-          ${isServiceBooking && data.totalPrice != null && data.pricePerDay != null && data.totalDays != null ? `
+          ${isServiceBooking ? `
           <tr>
             <td style="padding:0 40px 16px;">
-              <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#fafafa;border-radius:8px;border:1px solid #e5e7eb;">
-                <tr>
-                  <td style="padding:14px 20px;">
-                    <p style="color:#9ca3af;font-size:11px;margin:0;text-transform:uppercase;letter-spacing:1px;">Guide price</p>
-                    <p style="color:#1a1a1a;font-size:15px;font-weight:600;margin:6px 0 0;">£${Number(data.totalPrice).toFixed(2)}</p>
-                    <p style="color:#6b7280;font-size:12px;margin:4px 0 0;line-height:1.5;">${data.totalDays} day${data.totalDays !== 1 ? 's' : ''} × £${Number(data.pricePerDay).toFixed(2)} per day. Final price confirmed by our team.</p>
-                  </td>
-                </tr>
-              </table>
+              <p style="color:#6b7280;font-size:13px;margin:0;line-height:1.6;">Pricing is not confirmed online. Our team will contact you with a quote based on vehicle, locations, and your requirements.</p>
             </td>
           </tr>` : ''}
           <tr>
@@ -126,13 +113,8 @@ function buildCompanyEnquiryHtml(data: EnquiryData): string {
       <tr><td style="color:#6b7280;font-size:13px;padding:3px 0;">Service</td><td style="color:#1a1a1a;font-size:13px;font-weight:500;padding:3px 0;">${data.service}</td></tr>
       <tr><td style="color:#6b7280;font-size:13px;padding:3px 0;">Pickup</td><td style="color:#1a1a1a;font-size:13px;font-weight:500;padding:3px 0;">${data.pickupLocation} — ${data.pickupDate} at ${data.pickupTime}</td></tr>
       <tr><td style="color:#6b7280;font-size:13px;padding:3px 0;">Drop-off</td><td style="color:#1a1a1a;font-size:13px;font-weight:500;padding:3px 0;">${data.dropoffLocation} — ${data.dropoffDate} at ${data.dropoffTime}</td></tr>
-      ${data.totalDays != null && data.pricePerDay != null && data.totalPrice != null ? `
-      <tr><td style="color:#6b7280;font-size:13px;padding:3px 0;">Rental days</td><td style="color:#1a1a1a;font-size:13px;font-weight:500;padding:3px 0;">${data.totalDays}</td></tr>
-      <tr><td style="color:#6b7280;font-size:13px;padding:3px 0;">Price per day (£)</td><td style="color:#1a1a1a;font-size:13px;font-weight:500;padding:3px 0;">£${Number(data.pricePerDay).toFixed(2)} ${data.currency && data.currency !== 'GBP' ? `(${data.currency})` : ''}</td></tr>
-      <tr><td style="color:#6b7280;font-size:13px;padding:3px 0;">Guide total</td><td style="color:#1a1a1a;font-size:13px;font-weight:700;padding:3px 0;">£${Number(data.totalPrice).toFixed(2)}</td></tr>
-      ` : ''}
-      ${data.pricingSource ? `<tr><td style="color:#6b7280;font-size:13px;padding:3px 0;">Price source</td><td style="color:#1a1a1a;font-size:13px;font-weight:500;padding:3px 0;">${data.pricingSource === 'legacy' ? 'Legacy admin settings' : 'Pricing collection'}</td></tr>` : ''}
-      ${data.pricingNotes ? `<tr><td style="color:#6b7280;font-size:13px;padding:8px 0 3px;vertical-align:top;">Pricing notes</td><td style="color:#1a1a1a;font-size:13px;font-weight:500;padding:8px 0 3px;line-height:1.5;">${escapeHtml(data.pricingNotes)}</td></tr>` : ''}
+      ${data.totalDays != null && data.totalDays > 0 ? `<tr><td style="color:#6b7280;font-size:13px;padding:3px 0;">Rental days</td><td style="color:#1a1a1a;font-size:13px;font-weight:500;padding:3px 0;">${data.totalDays}</td></tr>` : ''}
+      <tr><td style="color:#6b7280;font-size:13px;padding:3px 0;vertical-align:top;">Price</td><td style="color:#1a1a1a;font-size:13px;font-weight:500;padding:3px 0;">To be quoted — contact customer with vehicle &amp; location-based pricing</td></tr>
       ${data.additionalNotes ? `<tr><td style="color:#6b7280;font-size:13px;padding:8px 0 3px;vertical-align:top;">Customer notes</td><td style="color:#1a1a1a;font-size:13px;font-weight:500;padding:8px 0 3px;line-height:1.5;">${escapeHtml(data.additionalNotes)}</td></tr>` : ''}
     `
     : `
